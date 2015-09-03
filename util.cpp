@@ -104,6 +104,17 @@ string extract_option(ifstream& param_file) {
   return _extract_option_string(input_str);
 }
 
+string extract_enum(const string name, ifstream& param_file, const list<string>& options) {
+  string selected_option = extract_option(param_file);
+  if (!isIn(options, selected_option)) {
+    cerr << "Error: Allowable options for " << name << " type are:\n";
+    for (string valid_option : options)
+      cerr << valid_option << "\n";
+    cerr << "       Please modify the PARAMS file accordingly and try again\n";
+    exit(1);
+  }
+}
+
 void sys(const string& s) {
   sys(s.c_str());
 }

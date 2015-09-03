@@ -21,10 +21,7 @@
 #define GA_OPERATOR_H
 
 #include <random>
-#include <vector>
-using namespace std;
-
-typedef vector<int> Chromosome;
+#include "../Chromosome.h"
 
 class GA_Operator {
 

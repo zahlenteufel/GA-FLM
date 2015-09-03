@@ -3,8 +3,6 @@
 
 #include "GA_Operator.h"
 
-typedef vector<Chromosome> Population;
-
 class SelectionOperator : public GA_Operator {
 
 public:

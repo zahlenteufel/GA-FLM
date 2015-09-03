@@ -1,25 +1,27 @@
+#ifndef CHROMOSOME_H
+#define CHROMOSOME_H
 
-// TODO: guards!
+#include <vector>
+#include <string>
 
-// #include <vector>
-// #include <string>
+using namespace std;
 
-// using namespace std;
+class Chromosome {
 
-// class Chromosome {
+public:
 
-// public:
+  Chromosome(const vector<int>& v, float ppl, float fitness);
 
-// 	Chromosome(const vector<int>& v, float ppl, float fitness);
+  string repr() const;
 
-// 	string repr() const;
+private:
 
-// private:
+  vector<int> genes;
 
-// 	vector<int> genes;
+};
 
-// };
+ostream& operator<<(ostream& stream, const Chromosome& chromosome) {
+  return stream << chromosome.repr();
+}
 
-// ostream& operator<<(ostream& stream, const Chromosome& chromosome) {
-// 	return stream << chromosome.repr();
-// }
+#endif

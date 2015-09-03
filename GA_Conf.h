@@ -24,27 +24,23 @@ public:
   string seedfile;
   int population_size;
   int maximum_number_of_generations;
-  float crossover_probability;
-  float mutation_probability;
   int fitness_scaling_constant;
+  
+  CrossoverOperator crossover;
+  SelectionOperator selection;
+  MutationOperator mutation;
 
-  string crossover;
-  string selection;
-  int tournament_n;
+  FitnessFunction fitness_function;
 
   float terminatefitness;
 
   string ga_path;
-  float bic_k;
-  string fitness_func;
+
   string id;
 
 private:
 
   void parse_GA_PARAMS_file(const string& gaparamsfile);
-
-  float fitness_by_BIC(float logprob, int complexity) const;
-  float fitness_by_inverse_ppl(float ppl) const;
 
 };
 

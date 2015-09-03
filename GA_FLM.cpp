@@ -24,10 +24,9 @@
  * THE PROGRAM, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES."
 */
 
-#include "ga-flm.h"
+#include "GA_FLM.h"
 #include "Gene.h"
 #include "BackoffGraph.h"
-#include "ga-operator.h"
 #include "util.h"
 #include <algorithm>
 
