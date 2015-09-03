@@ -34,20 +34,14 @@
 #include <queue>
 #include <map>
 
-BackoffGraph::BackoffGraph(const Gene& gene) : g(gene) {
+BackoffGraph::BackoffGraph(const string& factor_to_predict, const string& default_discount) :
+    factor_to_predict(factor_to_predict), default_discount(default_discount) {
   grow();
 }
 
 BackoffGraph::~BackoffGraph() {
   for (Node* node : _nodes)
     delete node;
-}
-
-void BackoffGraph::printDebug(){
-  for (int i = 0; i < int(_nodes.size()); i++){
-    cout << i << "--";
-    _nodes[i]->printDebug();
-  }
 }
 
 // Transforms factor tag, eg. M1 becomes M(-1). This is needed for writing factor-files.
@@ -67,16 +61,12 @@ string transform_factor_tag(const string orig) {
 // Main function call in charge of printing the factor file for a backoff graph.
 // This is done by recursively calling Node::printFile for each Node in the Backoff graph.
 // The smoothing options are implemented in the end by addOptions().
-void BackoffGraph::printFile(
-  const string& FACTOR_TO_PREDICT,
-  const string& DEFAULT_DISCOUNT,
-  const string& GA_PATH,
-  const string& basename) {
+string BackoffGraph::factor_file() {
   // If _nodes is empty, write no file
   if (!_nodes.empty()) {
     queue<int> que;
     string ffile = "1\n";
-    ffile += FACTOR_TO_PREDICT + ": ";
+    ffile += factor_to_predict + ": ";
     int count = 0; //counts the number of lines for backoff
 
     Node* root = _nodes[0];
@@ -87,7 +77,7 @@ void BackoffGraph::printFile(
     for (string factor : startFactors)
       ffile += transform_factor_tag(factor) + " ";
     
-    ffile += GA_PATH + basename + ".count.gz " + GA_PATH + basename + ".lm.gz INSERT_NUMBER_HERE\n";
+    ffile += ga_path + basename + ".count.gz " + ga_path + basename + ".lm.gz INSERT_NUMBER_HERE\n";
 
     ffile += root->printFile();
     count++; // counts the number of lines
@@ -132,23 +122,19 @@ void BackoffGraph::printFile(
     ffile.replace(pos, 18, itos(count + 1));
 
     // Add smoothing options by changing the ffile string
-    string newffile = addOptions(ffile);
+    string newffile = add_options(ffile);
 
     // final unigram distribution 
     newffile +=  "0 \t 0 \t ";
-    newffile += DEFAULT_DISCOUNT;
+    newffile += default_discount;
     newffile += " gtmin 1\n";
 
-    flmfile = GA_PATH + basename + ".flm";
-    ofstream outfile(flmfile.c_str());
-
-    outfile << newffile;
-    //cout << newffile;
+    return newffile;
   }
 }
 
 // Uses information in smoothing options part of the gene to change the factor-file correspondingly
-string BackoffGraph::addOptions(const string& ffile) {
+string BackoffGraph::add_options(const string& ffile) {
   size_t i = 0;
   vector<string> lines;
   map<string, string> smoothmap;
@@ -185,7 +171,7 @@ string BackoffGraph::addOptions(const string& ffile) {
 
 // Creates all children nodes of a parent node using the rules specified by the gene.
 // This is a recursive call, so it actually creates all descendents of the root node, resulting in a backoff graph.
-void BackoffGraph::useRule(Node* n) {
+void BackoffGraph::use_rule(Node* n) {
   int lev = n->level();
 
   if (lev > 1) {

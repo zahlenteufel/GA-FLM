@@ -31,50 +31,36 @@
 #include <algorithm>
 
 GA_FLM::GA_FLM(const GA_Conf& ga_conf, const FLM_Conf& flm_conf, float convergence_threshold) :
-  ga_conf(ga_conf), flm_conf(flm_conf), convergence_threshold(convergence_threshold) {
+  ga_conf(ga_conf), flm_conf(flm_conf), convergence_threshold(convergence_threshold), generation_number(0) {
 
   int population_size = ga_conf.population_size;
   int chromosome_length = flm_conf.chromosome_length;
-
-  generation_number = 0;
   
-  total_fitness = 0.0f;
-  bestsofar_fitness = 0.0f;
-  bestsofar_prev_fitness = 0.0f;
-  bestsofar_ppl = 0.0f;
-  number_of_genes_to_date = 1;
+  // total_fitness = 0.0f;
+  // bestsofar_fitness = 0.0f;
+  // bestsofar_prev_fitness = 0.0f;
+  // bestsofar_ppl = 0.0f;
 
-  fitness          = vector<float>(population_size, 0.0f);
-  best_so_far      = vector<int>(chromosome_length, 0);
-  best_so_far_prev = vector<int>(chromosome_length, 0);
-  oldpop = vector<vector<int> >(population_size, vector<int>(chromosome_length, 0));
-  newpop = vector<vector<int> >(population_size, vector<int>(chromosome_length, 0));
+  // fitness          = vector<float>(population_size, 0.0f);
+  // best_so_far      = vector<int>(chromosome_length, 0);
+  // best_so_far_prev = vector<int>(chromosome_length, 0);
+  // oldpop = vector<vector<int> >(population_size, vector<int>(chromosome_length, 0));
+  // newpop = vector<vector<int> >(population_size, vector<int>(chromosome_length, 0));
 
-  ga_operator = new GA_Operator(*this);
-}
-
-GA_FLM::~GA_FLM() {
-  delete ga_operator; // TODO: use smart pointer, or better: don't use pointer at all
+  // ga_operator = new GA_Operator(*this);
 }
 
 void GA_FLM::search() {
   // TODO: look in the internet a good pseudocode
   generate_initialpop();
-  compute_fitness_of_each_gene();
-  while (!termination_criteria_satisfied()) {
+  // compute_fitness_of_each_gene();
+  while (!termination_criteria_satisfied())
     create_new_generation();
-  }
+
   cerr << "Number of generations processed : " << generation_number << endl;
 }
 
 void execute_fngram_commands(queue<string>& fngram_commands) {
-  // NOTE: I only have pmake parallel cluster implementation here. 
-  // This section is specific to the computer platform in which ga-flm is run.
-  // To write a new implementation for another computer platform, just use the fngram_commands as a starting point.
-  // All necessary information is encapsulated in that data structure.
-  // As long as one makes sure that all commands in fngram_commands are run in before this function exits,
-  // no other part of the ga-flm code needs to be changed. 
-
   // Serial execution
   while (!fngram_commands.empty()) {
     string command = fngram_commands.front();
@@ -148,19 +134,16 @@ void GA_FLM::create_factor_file(const vector<int>& indv, const string& basename)
 
 void GA_FLM::compute_fitness_of_each_gene() {
   queue<string> fngram_commands;
-  for (int i = 0; i < ga_conf.population_size; i++) {
-    string indv_str;
-    for (int j = 0; j < flm_conf.chromosome_length; j++)
-      indv_str += itos(oldpop[i][j]);
 
-    map<string, float>::iterator it = fitness_table_map.find(indv_str);
+  for (auto chromosome : old_population) {
+    string indv_str = chromosome.repr();
+    auto it = fitness_table_map.find(indv_str);
     if (it == fitness_table_map.end()) {
       // indv_str is not found in map.
       // ... so it needs perplexity/fitness computations
       
       // add this gene to the map, with a dummy fitness value, which will be computed at a later step. 
       fitness_table_map[indv_str] = -2;
-      
       int gene_id = number_of_genes_to_date + i;
       string basename = ga_conf.id + "ga" + itos(gene_id);
       cerr << basename << endl;
@@ -171,6 +154,8 @@ void GA_FLM::compute_fitness_of_each_gene() {
         
       genes_to_evaluate.push(indv_str);
       files_to_evaluate.push(basename);
+    }
+      
     }
   }
 
@@ -215,7 +200,7 @@ void GA_FLM::find_gene_with_best_fitness() {
 }
 
 bool GA_FLM::has_converged() const {
-  return (bestsofar_fitness - average_fitness()) < convergence_threshold;
+  return (best_so_far.fitness() - average_fitness()) < convergence_threshold;
 }
 
 void GA_FLM::debug_algorithm() const {
@@ -244,8 +229,7 @@ void GA_FLM::debug_algorithm() const {
 }
 
 float GA_FLM::average_fitness() const {
-  double sum = accumulate(fitness.begin(), fitness.end(), 0.0);
-  return  sum / fitness.size();
+  return accumulate(fitness.begin(), fitness.end(), 0.0) / fitness.size();
 }
 
 float GA_FLM::weakest_fitness() const {
@@ -258,13 +242,12 @@ int GA_FLM::weakest_index() const {
 
 void GA_FLM::create_new_generation() {
 
-  do_selection();
-
-  ga_operator->shuffle_newpop();   // shuffle the newly selected population // TODO: what for??
+  ga_conf.selection.do_selection();
   
-  do_crossover();
+  ga_conf.crossover.do_crossover();
 
-  do_mutation();
+  ga_conf.mutation.do_mutation();
+  // mutation.be_elitist(); 
   
   compute_fitness_of_each_gene();
   
@@ -278,35 +261,11 @@ void GA_FLM::create_new_generation() {
   debug_algorithm();
 }
 
-void GA_FLM::do_selection() {
-
-  // TODO: use polymorphism
-
-  if (ga_conf.selection == "roulette")
-    ga_operator->do_roulette_selection(); 
-  else if (ga_conf.selection == "tournament")
-    ga_operator->do_tournament_selection();
-  else // if (ga_conf.selection == "SUS")
-    ga_operator->do_SUS_selection(weakest_fitness(), average_fitness());
-}
-
-void GA_FLM::do_crossover() {
-
-  // TODO: use polymorphism
-
-  if (ga_conf.crossover == "1-point")
-    ga_operator->do_1_point_crossover();
-  else if (ga_conf.crossover == "2-point")
-    ga_operator->do_2_point_crossover();
-  else // if (ga_conf.crossover == "uniform")
-    ga_operator->do_uniform_crossover();
-}
-
 void GA_FLM::do_mutation() {
   ga_operator->mutate();
 
   //replace weakest member with the best individual from the previous generation
-  ga_operator->be_elitist(); 
+  ga_operator->
 }
 
 
@@ -370,20 +329,20 @@ bool GA_FLM::termination_criteria_satisfied() {
   return true;
 }
 
-float GA_FLM::fitness_lookup(const vector<int>& indv) {
-  stringstream ss;
-  // TODO: chromosome should be an object and 
-  // we should ask the chromosome to give us its string representation.. 
-  for (int i : indv)
-    ss << i;
-  string indv_str = ss.str();
-  map<string, float>::iterator it = fitness_table_map.find(indv_str);
-  if (it == fitness_table_map.end()) {
-    cerr << "Error: Chromosome not in fitness lookup" << endl;
-    exit(1);
-    return 0;
-  }
-  else {
-    return fitness_table_map[indv_str];
-  }
-}
+// float GA_FLM::fitness_lookup(const vector<int>& indv) {
+//   stringstream ss;
+//   // TODO: chromosome should be an object and 
+//   // we should ask the chromosome to give us its string representation.. 
+//   for (int i : indv)
+//     ss << i;
+//   string indv_str = ss.str();
+//   map<string, float>::iterator it = fitness_table_map.find(indv_str);
+//   if (it == fitness_table_map.end()) {
+//     cerr << "Error: Chromosome not in fitness lookup" << endl;
+//     exit(1);
+//     return 0;
+//   }
+//   else {
+//     return fitness_table_map[indv_str];
+//   }
+// }
