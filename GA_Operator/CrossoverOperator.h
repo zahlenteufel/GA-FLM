@@ -2,45 +2,49 @@
 #define CROSSOVER_OPERATOR_H
 
 #include "GA_Operator.h"
+#include <vector>
 
-typedef vector<int> Chromosome;
+using namespace std;
 
-class CrossoverOperator : GA_Operator {
+typedef std::vector<int> Chromosome;
 
-  CrossoverOperator(float crossover_probability) : crossover_probability(crossover_probability) {};
+class CrossoverOperator : public GA_Operator {
 
-  void do_crossover(vector<Chromosome>& v1, vector<Chromosome>& v2); // TODO: do it inline
+  CrossoverOperator(int chromosome_length, float crossover_probability) : 
+    GA_Operator(chromosome_length),
+    crossover_probability(crossover_probability) {};
 
-  // (How to perform crossover of two chromosomes)
+  void do_crossover(const vector<Chromosome>&, vector<Chromosome>&); // TODO: do it inline
+
   virtual void do_crossover(Chromosome&, Chromosome&) = 0;
 
-private:
+protected:
 
   float crossover_probability;
 
   bool decide_to_do_crossover();
 
-  int pick_crosssite();
+  int pick_point();
 
-  pair<int, int> pick_2_crosssites() 
-
-};
-
-class UniformCrossover : CrossoverOperator {
-
-  void do_crossover(Chromosome&, Chromosome&);
+  pair<int, int> pick_range();
 
 };
 
-class OnePointCrossover : CrossoverOperator {
+class UniformCrossover : public CrossoverOperator {
 
-  void do_crossover(Chromosome&, Chromosome&)
+  virtual void do_crossover(Chromosome&, Chromosome&) override;
 
 };
 
-class TwoPointCrossover : CrossoverOperator {
+class OnePointCrossover : public CrossoverOperator {
 
-  void do_crossover(Chromosome&, Chromosome&)
+  virtual void do_crossover(Chromosome&, Chromosome&) override;
+
+};
+
+class TwoPointCrossover : public CrossoverOperator {
+
+  virtual void do_crossover(Chromosome&, Chromosome&) override;
 
 };
 

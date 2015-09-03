@@ -20,23 +20,19 @@
 #ifndef GA_OPERATOR_H
 #define GA_OPERATOR_H
 
+#include <random>
 #include <vector>
-#include <algorithm>
-
 using namespace std;
 
-class GA_FLM;
+typedef vector<int> Chromosome;
 
 class GA_Operator {
 
 public:
 
-  GA_Operator(int chromosome_length) : chromosome_length(chromosome_length) {}; 
+  GA_Operator(int chromosome_length);
 
   // void be_elitist(); // <-- TODO: change this name...
-
-  
-  void shuffle_newpop();
 
   //return a random number between 0 and 1
   float random_number_in_01();
@@ -45,11 +41,10 @@ public:
 
   int random_int(int max);
 
-private:
-
-  GA_FLM& ga_flm;
+protected:
 
   int chromosome_length;
+  default_random_engine rng;
 
 };
 
