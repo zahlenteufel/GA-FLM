@@ -50,7 +50,7 @@ For more information, refer to the coling2004.pdf paper in the doc directory.
 >    Seattle, WA 98195
 >    USA
 >    <duh@ee.washington.edu>
->    <http://ssli.ee.washington.edu/people/duh/>
+>    (http://ssli.ee.washington.edu/people/duh/ Homepage)
 --
 
 ## General Requirements and Installation
@@ -79,4 +79,4 @@ Refer to the manual.pdf in the doc directory for more detailed explanation.
 
  - Published research using GA-FLM may cite the following paper:
 
-  Kevin Duh and Katrin Kirchhoff, "Automatic Learning of Language Model Structure", Proc. of the 20th International Conference on Computational Linguistics (COLING-2004), Geneva, Switzerland, August 2004.
+  > Kevin Duh and Katrin Kirchhoff, "Automatic Learning of Language Model Structure", Proc. of the 20th International Conference on Computational Linguistics (COLING-2004), Geneva, Switzerland, August 2004.
