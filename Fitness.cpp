@@ -1,6 +1,9 @@
-#include "FitnessFunction.h"
+#include "Fitness.h"
 #include <cmath>
+
+
 /// BIC
+
 
 float BIC::evaluate(Chromosome& c) {
   if (c.complexity() == 0) // Can this ever happen?
@@ -14,8 +17,8 @@ string BIC::name() const {
   return "BIC";
 }
 
-/// InversePPL
 
+/// InversePPL
 
 
 float InversePPL::evaluate(Chromosome& c) {

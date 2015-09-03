@@ -24,19 +24,9 @@
  * THE PROGRAM, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES."
 */
 
-/*-
- * GA_Operator.cpp
- *     Functions that implement genetic algorithm operators: 
- *     selection, crossover, and mutation
- */
-
 #include "GA_Operator.h"
-// #include "../ga-flm.h"
-// #include "../util.h"
 #include <cmath>
 #include <ctime>
-#include <random>
-#include <chrono>
 
 GA_Operator::GA_Operator(int chromosome_length) : chromosome_length(chromosome_length) {
   unsigned seed = chrono::system_clock::now().time_since_epoch().count();

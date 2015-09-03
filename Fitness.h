@@ -1,12 +1,12 @@
-#ifndef FITNESS_FUNC_H
-#define FITNESS_FUNC_H
+#ifndef FITNESS_H
+#define FITNESS_H
 
 #include "Chromosome.h"
 #include <string>
 
 using namespace std;
 
-class FitnessFunction {
+class Fitness {
 
 public:
 
@@ -17,7 +17,7 @@ public:
 };
 
 
-class BIC : public FitnessFunction {
+class BIC : public Fitness {
 
 public:
 
@@ -37,7 +37,7 @@ private:
 };
 
 
-class InversePPL : public FitnessFunction {
+class InversePPL : public Fitness {
 
 public:
 

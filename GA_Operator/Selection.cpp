@@ -1,6 +1,6 @@
-#include "SelectionOperator.h"
+#include "Selection.h"
 
-Population RouletteSelection::do_selection(const Population& population) {
+Population Roulette::do_selection(const Population& population) {
   Population new_population;
   vector<float> roulette_wheel(population.size());
   float total_fitness = sum_fitness(population);
@@ -23,7 +23,7 @@ Population RouletteSelection::do_selection(const Population& population) {
   return new_population;
 }
 
-Population TournamentSelection::do_selection(const Population& population) {
+Population Tournament::do_selection(const Population& population) {
   Population new_population;
 
   while (new_population.size() < original_population.size()) {
@@ -34,7 +34,7 @@ Population TournamentSelection::do_selection(const Population& population) {
   return new_population;
 }
 
-Population SUS_Selection::do_selection(const Population& population) {
+Population SUS::do_selection(const Population& population) {
   vector<float> standard_fitness = standardized_fitness(population);
   float flindex = random_number_in_01();
   int picked_index = 1;

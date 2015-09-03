@@ -14,6 +14,12 @@ public:
 
   string repr() const;
 
+  float fitness() const;
+
+  float perplexity() const;
+
+  float logprob() const;
+
 private:
 
   vector<int> genes;

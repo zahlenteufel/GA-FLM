@@ -8,9 +8,9 @@ using namespace std;
 
 typedef std::vector<int> Chromosome;
 
-class CrossoverOperator : public GA_Operator {
+class Crossover : public GA_Operator {
 
-  CrossoverOperator(int chromosome_length, float crossover_probability) : 
+  Crossover(int chromosome_length, float crossover_probability) : 
     GA_Operator(chromosome_length),
     crossover_probability(crossover_probability) {};
 
@@ -30,19 +30,19 @@ protected:
 
 };
 
-class UniformCrossover : public CrossoverOperator {
+class Uniform : public Crossover {
 
   virtual void do_crossover(Chromosome&, Chromosome&) override;
 
 };
 
-class OnePointCrossover : public CrossoverOperator {
+class OnePoint : public Crossover {
 
   virtual void do_crossover(Chromosome&, Chromosome&) override;
 
 };
 
-class TwoPointCrossover : public CrossoverOperator {
+class TwoPoint : public Crossover {
 
   virtual void do_crossover(Chromosome&, Chromosome&) override;
 
