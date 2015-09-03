@@ -1,0 +1,48 @@
+Data Path               = experiments/data/
+TrainSet                = corpus_WGNCPL.txt
+DevSet 	                = factored_dev.txt
+fngram-count Path	= fngram-count
+fngram Path             = fngram
+fngram-count Options 	= -no-virtual-end-sentence -unk
+fngram Options 	        = -no-virtual-end-sentence -unk
+Factor to Predict       = W
+Total Available Factors = W,G,N,C,L,P
+Context of Factors      = 1,2,3
+Smoothing Options Length= 4
+Discount Options 	= kndiscount, cdiscount 1, wbdiscount, ndiscount
+Default Discount	= wbdiscount
+Max cutoff (max gtmin) 	= 5
+
+
+=========================================
+NOTES: This file contains settings regarding Factored Language Models
+
+- Data_Path is the directory path for both training and dev sets. TrainSet and DevSet are the filenames.
+
+- FngramCount_options and Fngram_options may contain any command-line options for training/testing the language model. 
+	- for example, FngramCount_options = "-unk"
+	- if no options are needed, use FngramCount_options = ""
+
+- Factor_to_Predict is the factor that we are building the language model for. Usually, this is W (word), but may be any factor
+
+- Total_Available_Factors and Context_of_Factors together specify the tags of factors that will be used in the GA optimization. There are two ways to specify these two parameters:
+	1. Specify all factors desired and the context desired:
+	e.g. Total_Available_Factors = W,S,P
+	     Context = 1,2
+	     => in this case, you'll get factors W(-1),S(-1),P(-1),W(-2),S(-2),P(-2). 
+	2. Alternatively, specify factor-tags directly without specifying context
+	e.g. Total_Available_Factors = W1,S1,P1,W2,S2,P2
+	     Context = 0
+	     => Note that in this case, you must set context=0. 
+	- The advantage of method 1 is that there's less typing to do. The advantage of method 2 is that you can specify arbitrary factor combinations. For example, you can specify W1,S1,S2 which is not possible with method 1.
+	- Be sure that the tags and numbers for context are separated by commas (,) as that is the delimiter that signals the program how to tell the tags apart.
+
+- Smoothing_Options_Length is the number of smoothing option parameters. Since smoothing is defined as tuples of (discount,gtmin), this should be an even number.
+
+- Discount_options can be any of the usual fngram discounting options (e.g. kndiscount,ukndiscount,wbdiscount,cdiscount 1,kndiscount). Like the Total_Available_Factors, be sure to use commas to delimit discounting options. Any number of discounting options may be used.
+
+- Default Discount is the one used for unigram and other cases when there are more backoff edges than number of smoothing options.
+
+- Max_Cutoff indicates the max possible value for gtmin. gtmin is
+the min cutoff count for a ngram to be included in the language model estimation.
+
