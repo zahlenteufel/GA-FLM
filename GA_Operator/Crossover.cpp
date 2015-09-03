@@ -10,11 +10,13 @@ bool Crossover::decide_to_do_crossover() {
 }
 
 // do crossover of pop1 and leave the result in pop2...
-void Crossover::do_crossover(const vector<Chromosome>& pop1, vector<Chromosome>& pop2) {
-  int population_size = pop1.size(), chromosome_length = pop1[0].size();
+void Crossover::do_crossover(const Population& pop1, Population& pop2) {
+  Population shuffled(pop1);
+  shuffled = shuffle(shuffled.begin(), shuffled.end());
+  int population_size = shuffled.size(), chromosome_length = shuffled[0].size();
   for (int index = 0; index + 1 < population_size; index += 2) {
     for (int j = 0; j < chromosome_length; j++) {
-      const Chromosome& new1 = pop1[index], new2 = pop1[index + 1];
+      const Chromosome& new1 = shuffled[index], new2 = shuffled[index + 1];
       Chromosome& old1 = pop2[index], old2 = pop2[index + 1];
       copy(new1, old1);
       copy(new2, old2);
