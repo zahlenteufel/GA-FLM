@@ -1,0 +1,13 @@
+
+
+This example data comes from the CoNLL 2000 Shared Task, and is originally prepared by Lance Ramshaw and Mitchell Marcus [RM95]. 
+
+Specifically, this data set contains section 20 of the Wall Street Journal corpus. The factors are "W", "P", and "C". "W" are the words. "P" are the part-of-speech tags as derived by the Brill tagger. "C" are the noun-phrase chunking tags derived from the Wall Street Journal corpus.
+
+The data is downloaded from:
+http://cnts.uia.ac.be/conll2000/chunking/
+
+
+Reference:
+
+[RM95] Lance A. Ramshaw and Mitchell P. Marcus, Text Chunking Using Transformation-Based Learning. In: "Proceedings of the Third ACL Workshop on Very Large Corpora", Cambridge MA, USA, 1995.

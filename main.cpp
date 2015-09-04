@@ -1,9 +1,13 @@
 #include <iostream>
-#include "ga-flm.h"
+#include "GA_FLM.h"
 #include "util.h"
 
+#define DEFAULT_SEED "example/SEED"
+#define DEFAULT_FLMPARAM "example/FLM-PARAMS"
+#define DEFAULT_GAPARAM "example/GA-PARAMS"
+
 void parse_arguments(int argc, char* argv[]);
-string seedfile = "SEED", flmparamfile = "FLM-PARAMS", gaparamfile = "GA-PARAMS"; 
+string seedfile = DEFAULT_SEED, flmparamfile = DEFAULT_FLMPARAM, gaparamfile = DEFAULT_GAPARAM; 
 
 int main(int argc, char* argv[]) {
   parse_arguments(argc, argv);
@@ -22,7 +26,10 @@ int main(int argc, char* argv[]) {
 }
 
 void print_usage(char* argv[]) {
-  cerr << "Usage: " << argv[0] << " [-s SEEDFILE] [-g GA-PARAMS-FILE] [-f FLM-PARAMS-FILE]" << endl;
+  cerr << "Usage: " << argv[0] << " [-s SEEDFILE] [-g GA-PARAMS-FILE] [-f FLM-PARAMS-FILE]" << "\n\n"
+    << "  SEEDFILE: genes to be injected in initial population (default: " << DEFAULT_SEED << ")\n"
+    << "  GA-PARAMS-FILE: parameters for the algorithm (default: " << DEFAULT_GAPARAM << ")\n"
+    << "  FLM-PARAMS-FILE: parameters for the language models (default: " << DEFAULT_FLMPARAM << ")\n" << endl;
   exit(1);
 }
 

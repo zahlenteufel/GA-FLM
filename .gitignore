@@ -1,2 +1,3 @@
 experiments/serial
 *.o
+example/serial/*
