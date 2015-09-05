@@ -1,5 +1,5 @@
-#ifndef _GA_CONF_H
-#define _GA_CONF_H
+#ifndef GA_CONF_H
+#define GA_CONF_H
 
 #include <string>
 #include <fstream>
@@ -26,9 +26,9 @@ public:
   int maximum_number_of_generations;
   int fitness_scaling_constant;
   
-  CrossoverOperator crossover;
-  SelectionOperator selection;
-  MutationOperator mutation;
+  Crossover crossover;
+  Selection selection;
+  Mutation mutation;
 
   FitnessFunction fitness_function;
 

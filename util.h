@@ -31,13 +31,20 @@ using namespace std;
 void sys(const string& s);
 void sys(const char* s);
 
-string itos(int i); // converts int into string
+string to_string(int i); // converts int into string
 
 float parse_float(const string& s);
 int parse_int(const string& s);
 
-void prv(vector<int> v);
-void prs(vector<string> v);
+template<typename T>
+ostream& operator<<(ostream &os, const vector<T> &v) {
+	for (int i = 0; i < int(v.size()); i++) {
+		if (i > 0)
+			os << " "; 
+		os << v[i]; 
+	}
+  return os;
+}
 
 vector<string> split(const string& input, const string& delimiter);
 

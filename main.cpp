@@ -1,5 +1,6 @@
 #include <iostream>
-#include "GA_FLM.h"
+// #include "GA_FLM.h"
+#include "GA_Conf.h"
 #include "util.h"
 
 #define DEFAULT_SEED "example/SEED"
@@ -12,16 +13,16 @@ string seedfile = DEFAULT_SEED, flmparamfile = DEFAULT_FLMPARAM, gaparamfile = D
 int main(int argc, char* argv[]) {
   parse_arguments(argc, argv);
   
-  sys("date");
+  // sys("date");
   
   GA_Conf ga_conf(gaparamfile, seedfile);
-  FLM_Conf flm_conf(flmparamfile);
+  // FLM_Conf flm_conf(flmparamfile);
 
-  GA_FLM ga_flm(ga_conf, flm_conf);
+  // GA_FLM ga_flm(ga_conf, flm_conf);
 
-  ga_flm.search();
+  // ga_flm.search();
   
-  sys("date");
+  // sys("date");
   return 0;
 }
 
