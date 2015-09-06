@@ -12,7 +12,7 @@ bool Crossover::decide_to_do_crossover() {
 // do crossover of pop1 and leave the result in pop2...
 void Crossover::do_crossover(const Population& pop1, Population& pop2) {
   Population shuffled(pop1);
-  shuffled = shuffle(shuffled.begin(), shuffled.end());
+  shuffle(shuffled.begin(), shuffled.end(), rng);
   int population_size = shuffled.size(), chromosome_length = shuffled[0].size();
   for (int index = 0; index + 1 < population_size; index += 2) {
     for (int j = 0; j < chromosome_length; j++) {

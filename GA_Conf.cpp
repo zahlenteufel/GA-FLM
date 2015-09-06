@@ -7,7 +7,7 @@ const list<string> selection_types = {"roulette", "tournament", "SUS"};
 const list<string> crossover_types = {"1-point", "2-point", "uniform"};
 const list<string> fitness_types = {"inversePPL", "BIC"};
 
-GA_Conf::GA_Conf(int chromosome_length, string gaparamfile, string seedfile) : 
+GA_Conf::GA_Conf(int chromosome_length, const string& gaparamfile, const string& seedfile) : 
   seedfile(seedfile), chromosome_length(chromosome_length) {
 
   parse_GA_PARAMS_file(gaparamfile);
@@ -53,32 +53,32 @@ void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
     exit(1);
   }
 
-  mutation = Mutation(chromosome_length, mutation_probability);
+  mutation = new Mutation(chromosome_length, mutation_probability);
 
   string crossover_type = extract_enum("crossover", params_file, crossover_types);
   if (crossover_type == "1-point")
-    crossover = OnePoint(chromosome_length);
+    crossover = new OnePoint(chromosome_length, crossover_probability); // ????
   else if (crossover_type == "2-point")
-    crossover = TwoPoint(chromosome_length);
+    crossover = new TwoPoint(chromosome_length, crossover_probability);
   else if (crossover_type == "uniform")
-    crossover = Uniform(chromosome_length);
+    crossover = new Uniform(chromosome_length, crossover_probability);
   
   string selection_type = extract_enum("selection", params_file, selection_types);
-  tournament_n = parse_int(extract_option(params_file));
+  int tournament_n = parse_int(extract_option(params_file));
   if (selection_type == "roulette")
-    selection = Roulette(chromosome_length);
+    selection = new Roulette(chromosome_length);
   else if (selection_type == "tournament")
-    selection = Tournament(chromosome_length, tournament_n);
+    selection = new Tournament(chromosome_length, tournament_n);
   else if (selection_type == "SUS")
-    selection = SUS(chromosome_length);
+    selection = new SUS(chromosome_length);
   
   float fitness_scaling_constant = parse_float(extract_option(params_file));
   string fitness_func = extract_enum("fitness", params_file, fitness_types);
   int bic_k = parse_int(extract_option(params_file));
   if (fitness_func == "inversePPL")
-    fitness_function = InversePPL(fitness_scaling_constant);
+    fitness_function = new InversePPL(fitness_scaling_constant);
   else if (fitness_func == "BIC")
-    fitness_function = BIC(fitness_scaling_constant, bic_k);
+    fitness_function = new BIC(fitness_scaling_constant, bic_k);
 
   ga_path = extract_option(params_file);
   id = extract_option(params_file);
@@ -92,7 +92,7 @@ void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
 void GA_Conf::dump() const {
   cerr << "------------------------------------------------\n"
     << "Population size     = " << population_size << "\n"
-    << "Maximum generations = " << maximum_number_of_generations << "\n"
+    << "Maximum generations = " << maximum_number_of_generations << "\n";
     // << "P(crossover)        = " << crossover_probability << "\n"
     // << "P(mutation)         = " << mutation_probability << "\n"
     // << "crossover           = " << crossover << "\n"

@@ -5,11 +5,11 @@
 /// BIC
 
 
-float BIC::evaluate(Chromosome& c) {
-  if (c.complexity() == 0) // Can this ever happen?
+float BIC::evaluate(float logprob, float perplexity, float complexity) const {
+  if (complexity == 0) // Can this ever happen?
     return 0;
 
-  float bic = -c.logprob() + k / 2 * log(float(c.complexity()));
+  float bic = -logprob + k / 2 * log(float(complexity));
   return fitness_scaling_constant / bic;
 }
 
@@ -21,8 +21,8 @@ string BIC::name() const {
 /// InversePPL
 
 
-float InversePPL::evaluate(Chromosome& c) {
-  return fitness_scaling_constant / c.perplexity();
+float InversePPL::evaluate(float logprob, float perplexity, float complexity) const {
+  return fitness_scaling_constant / perplexity;
 }
 
 string InversePPL::name() const {

@@ -19,7 +19,7 @@ class GA_Conf {
   
 public:
 
-  GA_Conf(int chromosome_length, string gaparamsfile, string seedfile);
+  GA_Conf(int chromosome_length, const string& gaparamfile, const string& seedfile);
 
   ~GA_Conf();
 

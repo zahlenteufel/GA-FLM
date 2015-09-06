@@ -9,22 +9,33 @@ public:
   
   Selection(int chromosome_length) : GA_Operator(chromosome_length) {};
 
-  virtual Population do_selection(const Population& population) = 0;
+  virtual Population do_selection(const Population& population, const vector<float>& fitness) = 0;
+
+protected:
+
+  vector<int> sample_with_repetition(int k, int size);
 
 };
 
 class Roulette : public Selection {
 
-  virtual Population do_selection(const Population& population) override;
+public:
+
+  Roulette(int chromosome_length) :
+    Selection(chromosome_length) {};
+
+  virtual Population do_selection(const Population& population, const vector<float>& fitness) override;
 
 };
 
 class Tournament : public Selection {
 
+public:
+
   Tournament(int chromosome_length, int tournament_n) :
     Selection(chromosome_length), tournament_n(tournament_n) {};
 
-  virtual Population do_selection(const Population& population) override;
+  virtual Population do_selection(const Population& population, const vector<float>& fitness) override;
 
 private:
 
@@ -34,7 +45,12 @@ private:
 
 class SUS : public Selection {
 
-  virtual Population do_selection(const Population& population) override;
+public:
+
+  SUS(int chromosome_length) :
+    Selection(chromosome_length) {};
+
+  virtual Population do_selection(const Population& population, const vector<float>& fitness) override;
 
 };
 
@@ -42,14 +58,10 @@ class SUS : public Selection {
 // Auxiliary Functions
 //
 
-float sum_fitness(const Population& population);
-
-Population sample_with_repetition(int k, const Population& population);
-
-bool compare_fitness(const Chromosome& c1, const Chromosome& c2);
-
 void mean_and_standard_deviation(const vector<float>& v, float& mean, float& stddev);
 
-vector<float> standardized_fitness(const Population& population);
+vector<float> standardize(const vector<float>& v);
+
+float sum(vector<float> v);
 
 #endif

@@ -3,6 +3,7 @@
 #include "GA_Conf.h"
 #include "util.h"
 
+
 #define DEFAULT_SEED "example/SEED"
 #define DEFAULT_FLMPARAM "example/FLM-PARAMS"
 #define DEFAULT_GAPARAM "example/GA-PARAMS"
@@ -13,7 +14,7 @@ string seedfile = DEFAULT_SEED, flmparamfile = DEFAULT_FLMPARAM, gaparamfile = D
 int main(int argc, char* argv[]) {
   parse_arguments(argc, argv);
   FLM_Conf flm_conf(flmparamfile);
-  // GA_Conf ga_conf(flm_conf.chromosome_length, gaparamfile, seedfile);
+  GA_Conf ga_conf(flm_conf.chromosome_length, gaparamfile, seedfile);
 
   // GA_FLM ga_flm(ga_conf, flm_conf);
 

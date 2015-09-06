@@ -1,12 +1,12 @@
 #include "Selection.h"
 
-Population Roulette::do_selection(const Population& population, float (*bar)(Chromosome) fitness) {
+Population Roulette::do_selection(const Population& population, const vector<float>& fitness) {
   Population new_population;
   vector<float> roulette_wheel(population.size());
-  float total_fitness = sum_fitness(population, fitness);
+  float total_fitness = sum(fitness);
 
   for (int i = 0; i < int(population.size()); i++) {
-    roulette_wheel[i] = fitness(population[i]) / total_fitness;
+    roulette_wheel[i] = fitness[i] / total_fitness;
     if (i > 0)
       roulette_wheel[i] += roulette_wheel[i - 1];
   }
@@ -15,7 +15,7 @@ Population Roulette::do_selection(const Population& population, float (*bar)(Chr
     float roulette = random_number_in_01();
     for (int j = 0; j < int(population.size()); j++) {
       if (roulette <= roulette_wheel[j]) {
-        new_population.append(population[j]);
+        new_population.push_back(population[j]);
         break;
       }
     }
@@ -23,29 +23,31 @@ Population Roulette::do_selection(const Population& population, float (*bar)(Chr
   return new_population;
 }
 
-Population Tournament::do_selection(const Population& population, float (*bar)(Chromosome) fitness) {
+Population Tournament::do_selection(const Population& population, const vector<float>& fitness) {
   Population new_population;
 
-  while (new_population.size() < original_population.size()) {
-    Population nrandom = sample_with_repetition(tournament_n, population);
+  while (new_population.size() < population.size()) {
+    vector<int> random_indexes = sample_with_repetition(tournament_n, population.size());
+
     float best_index = 0;
-    for (int i = 1; i < int(nrandom.size()); i++)
-      if (fitness(nrandom[i]) > fitness(best_index))
+    for (int i = 1; i < int(random_indexes.size()); i++)
+      if (fitness[random_indexes[i]] > fitness[random_indexes[best_index]])
         best_index = i;
-    new_population.append(nrandom[best_index]);
+    new_population.push_back(population[random_indexes[best_index]]);
   }
   return new_population;
 }
 
-Population SUS::do_selection(const Population& population, float (*bar)(Chromosome) fitness) {
-  vector<float> standard_fitness = standardized_fitness(population, fitness);
+Population SUS::do_selection(const Population& population, const vector<float>& fitness) {
+  vector<float> standard_fitness = standardize(fitness);
+  Population new_population;
   float flindex = random_number_in_01();
   int picked_index = 1;
   for (int i = 0; i < int(population.size()) && picked_index <= int(population.size()); i++) {
     flindex += standard_fitness[i];
     while (picked_index < flindex) {
       if (picked_index <= population.size())
-        new_population.append(population[picked_index - 1]);
+        new_population.push_back(population[picked_index - 1]);
       picked_index++;
     }
   }
@@ -56,45 +58,36 @@ Population SUS::do_selection(const Population& population, float (*bar)(Chromoso
 // Auxiliary Functions
 //
 
-float sum_fitness(const Population& population) {
-  float sum = 0;
-  for (auto& chromosome : population)
-    sum += chromosome.fitness();
-  return sum;
-}
-
 void mean_and_standard_deviation(const vector<float>& v, float& mean, float& stddev) {
-  mean = accumulate(v.begin(), v.end(), 0.0) / v.size();
+  mean = sum(v) / v.size();
   
   float accum = 0.0;
   for (int i : v)
-    accum += (i - mean) * (i - meam);
+    accum += (i - mean) * (i - mean);
 
   stddev = sqrt(accum / (v.size() - 1));
 }
 
-vector<float> standardized_fitness(const Population& population) {
+vector<float> standardize(const vector<float>& v) {
   // TODO: check bibliography
-  vector<float> fitness;
+  vector<float> linear_scaling;
   float mean, standard_deviation;
-  for (auto chromosome& : population)
-    fitness.push_back(chromosome.fitness());
   
-  mean_and_standard_deviation(fitness, mean, stddev);
+  mean_and_standard_deviation(v, mean, standard_deviation);
 
-  for (float fitness_value : fitness)
-    linear_scaling.push_back((fitness_value - mean) / standard_deviation);
+  for (float value : v)
+    linear_scaling.push_back((value - mean) / standard_deviation);
 
   return linear_scaling;
 }
 
-Population sample_with_repetition(int k, const Population& population) {
-  Population result;
+vector<int> Selection::sample_with_repetition(int k, int size) {
+  vector<int> result;
   for (int i = 0; i < k; i++)
-    result.append(population[randint(population.size())]);
+    result.push_back(random_int(size));
   return result;
 }
 
-bool compare_fitness(const Chromosome& c1, const Chromosome& c2) {
-  return c1.fitness() < c2.fitness();
+float sum(vector<float> v) {
+  return accumulate(v.begin(), v.end(), 0);
 }

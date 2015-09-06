@@ -2,19 +2,15 @@
 #define FITNESS_H
 
 #include <string>
-#include <vector>
 
 using namespace std;
-
-typedef vector<int> Chromosome;
-typedef vector<Chromosome> Population;
 
 
 class Fitness {
 
 public:
 
-  virtual float evaluate(Chromosome& c) const = 0;
+  virtual float evaluate(float logprob, float perplexity, float complexity) const = 0;
 
   virtual string name() const = 0;
 
@@ -28,7 +24,7 @@ public:
   BIC(float fitness_scaling_constant, int k) :
     fitness_scaling_constant(fitness_scaling_constant), k(k) {};
 
-  float evaluate(Chromosome& c) const override;
+  float evaluate(float logprob, float perplexity, float complexity) const override;
 
   string name() const override;
 
@@ -48,7 +44,7 @@ public:
   InversePPL(float fitness_scaling_constant) :
     fitness_scaling_constant(fitness_scaling_constant) {};
 
-  float evaluate(Chromosome& c) const override;
+  float evaluate(float logprob, float perplexity, float complexity) const override;
 
   string name() const override;
 

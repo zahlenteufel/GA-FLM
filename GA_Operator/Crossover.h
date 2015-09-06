@@ -10,6 +10,8 @@ typedef vector<int> Chromosome;
 
 class Crossover : public GA_Operator {
 
+public:
+
   Crossover(int chromosome_length, float crossover_probability) : 
     GA_Operator(chromosome_length),
     crossover_probability(crossover_probability) {};
@@ -32,17 +34,32 @@ protected:
 
 class Uniform : public Crossover {
 
+public:
+
+  Uniform(int chromosome_length, float crossover_probability) : 
+    Crossover(chromosome_length, crossover_probability) {};
+
   virtual void do_crossover(Chromosome&, Chromosome&) override;
 
 };
 
 class OnePoint : public Crossover {
 
+public:
+
+  OnePoint(int chromosome_length, float crossover_probability) : 
+    Crossover(chromosome_length, crossover_probability) {};
+
   virtual void do_crossover(Chromosome&, Chromosome&) override;
 
 };
 
 class TwoPoint : public Crossover {
+
+public:
+
+  TwoPoint(int chromosome_length, float crossover_probability) : 
+    Crossover(chromosome_length, crossover_probability) {};
 
   virtual void do_crossover(Chromosome&, Chromosome&) override;
 

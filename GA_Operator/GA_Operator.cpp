@@ -26,7 +26,7 @@
 
 #include "GA_Operator.h"
 #include <cmath>
-#include <ctime>
+#include <chrono>
 
 GA_Operator::GA_Operator(int chromosome_length) : chromosome_length(chromosome_length) {
   unsigned seed = chrono::system_clock::now().time_since_epoch().count();
