@@ -12,8 +12,10 @@ string seedfile = DEFAULT_SEED, flmparamfile = DEFAULT_FLMPARAM, gaparamfile = D
 
 int main(int argc, char* argv[]) {
   parse_arguments(argc, argv);
-  
-  FLM_Conf flm_conf(flmparamfile);
+  cout << "seedfile: '" << seedfile << "'" << endl;
+  cout << "flmparamfile: '" << flmparamfile << "'" << endl;
+  cout << "gaparamfile: '" << gaparamfile << "'" << endl;
+  // FLM_Conf flm_conf(flmparamfile);
   // GA_Conf ga_conf(flm_conf.chromosome_length, gaparamfile, seedfile);
 
   // GA_FLM ga_flm(ga_conf, flm_conf);
@@ -28,7 +30,7 @@ void print_usage(char* argv[]) {
     << "  SEEDFILE: genes to be injected in initial population (default: " << DEFAULT_SEED << ")\n"
     << "  GA-PARAMS-FILE: parameters for the algorithm (default: " << DEFAULT_GAPARAM << ")\n"
     << "  FLM-PARAMS-FILE: parameters for the language models (default: " << DEFAULT_FLMPARAM << ")\n" << endl;
-  exit(1);
+  exit(0);
 }
 
 void parse_arguments(int argc, char* argv[]) {
@@ -41,6 +43,10 @@ void parse_arguments(int argc, char* argv[]) {
       flag = pchar[1];
       if (flag == 'h')
         print_usage(argv);
+      if (flag != 's' and flag != 'g' and flag != 'f' and flag != 'p') {
+        cerr << "unrecognized option, for help use -h" << endl;
+        exit(1);
+      }
     } else {
       if (flag == 's') {
         seedfile = pchar;
