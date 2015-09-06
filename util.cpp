@@ -84,21 +84,29 @@ int parse_int(const string& s) {
   return result;
 }
 
+string trim(const string& s) {
+  int begin_pos = s.find_first_not_of(' ');
+  int end_pos = s.find_last_not_of(' ');
+
+  if (end_pos == -1)
+    return s;
+
+  int length = end_pos - begin_pos + 1;
+  return s.substr(begin_pos, length);
+}
+
 // Extracts the option from a line of PARAM file
 string _extract_option_string(const string& input_str) {
   // Extracts substring after "=" character
   int delim_pos = input_str.find_first_of('=');
+
+  if (delim_pos == string::npos)
+    throw "Invalid option, '=' expected";
+
   int length = input_str.size() - delim_pos;
   string option_str = input_str.substr(delim_pos + 1, length);
 
-  // Trim white spaces before and after the substring
-  int beginpos = option_str.find_first_not_of(' ');
-  int endpos = option_str.find_last_not_of(' ');
-
-  int optionlength = endpos - beginpos + 1;
-  string final_str = option_str.substr(beginpos,optionlength);
-  
-  return final_str;
+  return trim(option_str);
 }
 
 string extract_option(ifstream& param_file) {

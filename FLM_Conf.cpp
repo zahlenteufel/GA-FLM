@@ -8,7 +8,6 @@ FLM_Conf::FLM_Conf(string s) {
 
 void FLM_Conf::parse_FLM_PARAMS_file(const string& paramfile) {
   ifstream flm_param_file(paramfile.c_str());
-
   data_path = extract_option(flm_param_file);
   trainset = extract_option(flm_param_file);
   devset = extract_option(flm_param_file);
