@@ -12,14 +12,19 @@ void parse_arguments(int argc, char* argv[]);
 string seedfile = DEFAULT_SEED, flmparamfile = DEFAULT_FLMPARAM, gaparamfile = DEFAULT_GAPARAM; 
 
 int main(int argc, char* argv[]) {
-  parse_arguments(argc, argv);
-  FLM_Conf flm_conf(flmparamfile);
-  GA_Conf ga_conf(flm_conf.chromosome_length, gaparamfile, seedfile);
+  try {
+    parse_arguments(argc, argv);
+    FLM_Conf flm_conf(flmparamfile);
+    GA_Conf ga_conf(flm_conf.chromosome_length, gaparamfile, seedfile);
 
-  // GA_FLM ga_flm(ga_conf, flm_conf);
+    // GA_FLM ga_flm(ga_conf, flm_conf);
 
-  // ga_flm.search();
-  
+    // ga_flm.search();
+  } catch (char const* s) {
+    cerr << "ERROR: " << s << endl;
+    return 1;
+  }
+
   return 0;
 }
 

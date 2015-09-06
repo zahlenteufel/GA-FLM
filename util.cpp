@@ -36,28 +36,6 @@
 #include <algorithm>
 #include "util.h"
 
-#define isIn(c, e) (find((c).begin(), (c).end(), e) != (c).end())
-
-// // converts int into string -->already exists in <string> :D
-// string to_string(int i) {
-//   stringstream s;
-//   s << i;
-//   return s.str();
-// }
-
-// Prints vectors (Helper)
-// void prv(vector<int> v) {
-//   for (int x : v)
-//     cout << x << " ";
-//   cout << endl;
-// }
-
-// void prs(vector<string> v) {
-//   for (string s : v)
-//     cout << s << " ";
-//   cout << endl;
-// }
-
 // Splits a string into several a vector of smaller strings based on the delimiter.
 vector<string> split(const string& input, const string& delimiter) {
   size_t start = 0, end = 0;
@@ -113,17 +91,6 @@ string extract_option(ifstream& param_file) {
   string input_str;
   getline(param_file, input_str, '\n');
   return _extract_option_string(input_str);
-}
-
-string extract_enum(const string name, ifstream& param_file, const list<string>& options) {
-  string selected_option = extract_option(param_file);
-  if (!isIn(options, selected_option)) {
-    cerr << "Error: Allowable options for " << name << " type are:\n";
-    for (string valid_option : options)
-      cerr << valid_option << "\n";
-    cerr << "       Please modify the PARAMS file accordingly and try again\n";
-    exit(1);
-  }
 }
 
 void sys(const string& s) {

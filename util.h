@@ -50,6 +50,4 @@ vector<string> split(const string& input, const string& delimiter);
 
 string extract_option(ifstream& param_file);
 
-string extract_enum(const string name, ifstream& param_file, const list<string>& options);
-
 #endif

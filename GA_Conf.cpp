@@ -3,13 +3,12 @@
 #include <algorithm>
 #include <list>
 
-const list<string> selection_types = {"roulette", "tournament", "SUS"};
-const list<string> crossover_types = {"1-point", "2-point", "uniform"};
-const list<string> fitness_types = {"inversePPL", "BIC"};
-
 GA_Conf::GA_Conf(int chromosome_length, const string& gaparamfile, const string& seedfile) : 
   seedfile(seedfile), chromosome_length(chromosome_length) {
-
+  crossover = nullptr;
+  selection = nullptr;
+  mutation = nullptr;
+  fitness_function = nullptr;
   parse_GA_PARAMS_file(gaparamfile);
 }
 
@@ -55,15 +54,20 @@ void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
 
   mutation = new Mutation(chromosome_length, mutation_probability);
 
-  string crossover_type = extract_enum("crossover", params_file, crossover_types);
+  string crossover_type = extract_option(params_file);
+
+  cout << crossover_type << endl;
+
   if (crossover_type == "1-point")
     crossover = new OnePoint(chromosome_length, crossover_probability); // ????
   else if (crossover_type == "2-point")
     crossover = new TwoPoint(chromosome_length, crossover_probability);
   else if (crossover_type == "uniform")
     crossover = new Uniform(chromosome_length, crossover_probability);
+  else
+    throw "Invalid crossover";
   
-  string selection_type = extract_enum("selection", params_file, selection_types);
+  string selection_type = extract_option(params_file);
   int tournament_n = parse_int(extract_option(params_file));
   if (selection_type == "roulette")
     selection = new Roulette(chromosome_length);
@@ -71,14 +75,18 @@ void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
     selection = new Tournament(chromosome_length, tournament_n);
   else if (selection_type == "SUS")
     selection = new SUS(chromosome_length);
+  else
+    throw "Invalid selection";
   
   float fitness_scaling_constant = parse_float(extract_option(params_file));
-  string fitness_func = extract_enum("fitness", params_file, fitness_types);
+  string fitness_func = extract_option(params_file);
   int bic_k = parse_int(extract_option(params_file));
   if (fitness_func == "inversePPL")
     fitness_function = new InversePPL(fitness_scaling_constant);
   else if (fitness_func == "BIC")
     fitness_function = new BIC(fitness_scaling_constant, bic_k);
+  else
+    throw "Invalid fitness function";
 
   ga_path = extract_option(params_file);
   id = extract_option(params_file);
