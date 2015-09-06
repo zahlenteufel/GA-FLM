@@ -12,8 +12,8 @@
  * "as is" without express or implied warranty.
  */
 
-#ifndef _GA_FLM_H
-#define _GA_FLM_H
+#ifndef GA_H
+#define GA_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,7 +32,7 @@
 
 using namespace std;
 
-class GA_FLM {
+class GA {
 
 public:
 
@@ -45,7 +45,7 @@ public:
   const int MAXBITS = 150;
   const int MAXSTORAGE = 32768;
 
-	GA_FLM(const GA_Conf& ga_conf, const FLM_Conf& flm_conf, float convergence_threshold = 0.001);
+	GA(const GA_Conf& ga_conf, const FLM_Conf& flm_conf, float convergence_threshold = 0.001);
 
   void search();
 
@@ -61,7 +61,7 @@ public:
   float fitness_lookup(const Chromosome& indv);
 
   Population oldpop, newpop;
-  // vector<float> fitness;
+  vector<float> fitness;
   
   Chromosome best_so_far;
   // Chromosome best_so_far_prev;
@@ -70,9 +70,9 @@ public:
   // float* fitness_table_fit;
   // int fitness_table_count;
   // float total_fitness;
-  // float bestsofar_fitness;
+  float bestsofar_fitness;
   // float bestsofar_prev_fitness;
-  // float bestsofar_ppl;
+  float bestsofar_ppl;
   // float bestsofar_prev_ppl;
 
   // vector<Chromosome> population;
@@ -83,8 +83,8 @@ public:
   void parse_GA_PARAMS_file();
   void parse_FLM_PARAMS_file();
 
-  // map<string, float> fitness_table_map; // Key is a string representation of a gene. Value is the fitness of that gene sequence.
-  // map<string, float> ppl_table_map; // Key is a string representation of a gene. Value is the perplexity of that gene sequence.
+  map<string, float> fitness_table_map; // Key is a string representation of a gene. Value is the fitness of that gene sequence.
+  map<string, float> ppl_table_map; // Key is a string representation of a gene. Value is the perplexity of that gene sequence.
   // queue<string> genes_to_evaluate;
   // queue<string> files_to_evaluate;
 
@@ -95,10 +95,7 @@ private:
   void do_mutation();
   void compute_fitness_of_each_gene();
   void find_gene_with_best_fitness();
-  // float average_fitness() const;
-  // float weakest_fitness() const;
   bool has_converged() const;
-  // int weakest_index() const;
   void debug_algorithm() const;
 
 };

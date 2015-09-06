@@ -1,12 +1,12 @@
-#ifndef CROSSOVER_OPERATOR_H
-#define CROSSOVER_OPERATOR_H
+#ifndef CROSSOVER_H
+#define CROSSOVER_H
 
 #include "GA_Operator.h"
 #include <vector>
 
 using namespace std;
 
-typedef std::vector<int> Chromosome;
+typedef vector<int> Chromosome;
 
 class Crossover : public GA_Operator {
 
@@ -14,7 +14,7 @@ class Crossover : public GA_Operator {
     GA_Operator(chromosome_length),
     crossover_probability(crossover_probability) {};
 
-  void do_crossover(const vector<Chromosome>&, vector<Chromosome>&); // TODO: do it inline
+  void do_crossover(const Population&, Population&); // TODO: do it inline
 
   virtual void do_crossover(Chromosome&, Chromosome&) = 0;
 

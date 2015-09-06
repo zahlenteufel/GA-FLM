@@ -24,13 +24,13 @@
  * THE PROGRAM, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES."
 */
 
-#include "GA_FLM.h"
-#include "Gene.h"
+#include "GA.h"
+#include "Representation/Gene.h"
 #include "BackoffGraph.h"
 #include "util.h"
 #include <algorithm>
 
-GA_FLM::GA_FLM(const GA_Conf& ga_conf, const FLM_Conf& flm_conf, float convergence_threshold) :
+GA::GA(const GA_Conf& ga_conf, const FLM_Conf& flm_conf, float convergence_threshold) :
   ga_conf(ga_conf), flm_conf(flm_conf), convergence_threshold(convergence_threshold), generation_number(0) {
 
   int population_size = ga_conf.population_size;
@@ -47,10 +47,9 @@ GA_FLM::GA_FLM(const GA_Conf& ga_conf, const FLM_Conf& flm_conf, float convergen
   // oldpop = vector<vector<int> >(population_size, vector<int>(chromosome_length, 0));
   // newpop = vector<vector<int> >(population_size, vector<int>(chromosome_length, 0));
 
-  // ga_operator = new GA_Operator(*this);
 }
 
-void GA_FLM::search() {
+void GA::search() {
   // TODO: look in the internet a good pseudocode
   generate_initialpop();
   // compute_fitness_of_each_gene();
@@ -69,7 +68,7 @@ void execute_fngram_commands(queue<string>& fngram_commands) {
   }
 }
 
-void GA_FLM::collect_ppl() {
+void GA::collect_ppl() {
   while (!files_to_evaluate.empty()) {
     string filename = files_to_evaluate.front();
     files_to_evaluate.pop();
@@ -128,11 +127,11 @@ void GA_FLM::collect_ppl() {
   }
 }
 
-void GA_FLM::create_factor_file(const vector<int>& indv, const string& basename) {
+void GA::create_factor_file(const vector<int>& indv, const string& basename) {
   flm_conf.create_factor_file(indv, basename, ga_conf.ga_path);
 }
 
-void GA_FLM::compute_fitness_of_each_gene() {
+void GA::compute_fitness_of_each_gene() {
   queue<string> fngram_commands;
 
   for (auto chromosome : old_population) {
@@ -145,7 +144,7 @@ void GA_FLM::compute_fitness_of_each_gene() {
       // add this gene to the map, with a dummy fitness value, which will be computed at a later step. 
       fitness_table_map[indv_str] = -2;
       int gene_id = number_of_genes_to_date + i;
-      string basename = ga_conf.id + "ga" + itos(gene_id);
+      string basename = ga_conf.id + "ga" + to_string(gene_id);
       cerr << basename << endl;
       
       create_factor_file(oldpop[i], basename);
@@ -163,7 +162,7 @@ void GA_FLM::compute_fitness_of_each_gene() {
   collect_ppl();
 }
 
-void GA_FLM::find_gene_with_best_fitness() {
+void GA::find_gene_with_best_fitness() {
   //save previous best_so_far fitness values and ppl values
   if (generation_number > 0) {
     if (bestsofar_fitness > bestsofar_prev_fitness) {
@@ -195,15 +194,15 @@ void GA_FLM::find_gene_with_best_fitness() {
   // Find the corresponding perplexity of the best gene in current generation
   string bestsofar_str;
   for (int j = 0; j < flm_conf.chromosome_length; j++)
-    bestsofar_str += itos(best_so_far[j]);
+    bestsofar_str += to_string(best_so_far[j]);
   bestsofar_ppl = ppl_table_map[bestsofar_str];
 }
 
-bool GA_FLM::has_converged() const {
+bool GA::has_converged() const {
   return (best_so_far.fitness() - average_fitness()) < convergence_threshold;
 }
 
-void GA_FLM::debug_algorithm() const {
+void GA::debug_algorithm() const {
   cerr << "Generation : " << generation_number << "\n";
   cerr << "For this generation:\n";
   cerr << "Average fitness            = " << average_fitness() << "\n";
@@ -228,19 +227,19 @@ void GA_FLM::debug_algorithm() const {
 // }
 }
 
-float GA_FLM::average_fitness() const {
+float GA::average_fitness() const {
   return accumulate(fitness.begin(), fitness.end(), 0.0) / fitness.size();
 }
 
-float GA_FLM::weakest_fitness() const {
+float GA::weakest_fitness() const {
   return *min_element(fitness.begin(), fitness.end());
 }
 
-int GA_FLM::weakest_index() const {
+int GA::weakest_index() const {
   return min_element(fitness.begin(), fitness.end()) - fitness.begin();
 }
 
-void GA_FLM::create_new_generation() {
+void GA::create_new_generation() {
 
   ga_conf.selection.do_selection();
   
@@ -261,7 +260,7 @@ void GA_FLM::create_new_generation() {
   debug_algorithm();
 }
 
-void GA_FLM::do_mutation() {
+void GA::do_mutation() {
   ga_operator->mutate();
 
   //replace weakest member with the best individual from the previous generation
@@ -269,7 +268,7 @@ void GA_FLM::do_mutation() {
 }
 
 
-void GA_FLM::generate_initialpop() {
+void GA::generate_initialpop() {
   // First, seed population by reading genes from file
 
   ifstream infile(ga_conf.seedfile.c_str());
@@ -314,7 +313,7 @@ void GA_FLM::generate_initialpop() {
 }
 
 
-bool GA_FLM::termination_criteria_satisfied() {
+bool GA::termination_criteria_satisfied() {
   string reason;
   if (bestsofar_fitness >= ga_conf.terminatefitness)
     reason = "desired fitness achieved";
@@ -329,7 +328,7 @@ bool GA_FLM::termination_criteria_satisfied() {
   return true;
 }
 
-// float GA_FLM::fitness_lookup(const vector<int>& indv) {
+// float GA::fitness_lookup(const vector<int>& indv) {
 //   stringstream ss;
 //   // TODO: chromosome should be an object and 
 //   // we should ask the chromosome to give us its string representation.. 

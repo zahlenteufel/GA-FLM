@@ -3,20 +3,26 @@
 #include <algorithm>
 #include <list>
 
-#define isIn(c, e) (find((c).begin(), (c).end(), e) != (c).end())
-
 const list<string> selection_types = {"roulette", "tournament", "SUS"};
 const list<string> crossover_types = {"1-point", "2-point", "uniform"};
 const list<string> fitness_types = {"inversePPL", "BIC"};
 
-GA_Conf::GA_Conf(string gaparamfile, string seedfile) : seedfile(seedfile) {
+GA_Conf::GA_Conf(int chromosome_length, string gaparamfile, string seedfile) : 
+  seedfile(seedfile), chromosome_length(chromosome_length) {
+
   parse_GA_PARAMS_file(gaparamfile);
+}
+
+GA_Conf::~GA_Conf() {
+  delete crossover;
+  delete selection;
+  delete mutation;
+  delete fitness_function;
 }
 
 void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
   ifstream params_file(gaparamfile.c_str());
 
-  // Population size
   population_size = parse_int(extract_option(params_file));
   if (population_size >= MAXPOP) {
     cerr << "Error: Maximum allowable population size is " << MAXPOP << "\n";
@@ -24,7 +30,6 @@ void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
     exit(1);
   }
 
-  // Max generation
   maximum_number_of_generations = parse_int(extract_option(params_file)); 
   if (maximum_number_of_generations >= MAXGEN) {
     cerr << "Error: Maximum allowable number of generations is " << MAXGEN << "\n";
@@ -48,24 +53,24 @@ void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
     exit(1);
   }
 
-  mutation = MutationOperator(chromosome_length, mutation_probability);
+  mutation = Mutation(chromosome_length, mutation_probability);
 
   string crossover_type = extract_enum("crossover", params_file, crossover_types);
   if (crossover_type == "1-point")
-    crossover = OnePointCrossover(chromosome_length);
+    crossover = OnePoint(chromosome_length);
   else if (crossover_type == "2-point")
-    crossover = TwoPointCrossover(chromosome_length);
+    crossover = TwoPoint(chromosome_length);
   else if (crossover_type == "uniform")
-    crossover = UniformCrossover(chromosome_length);
+    crossover = Uniform(chromosome_length);
   
   string selection_type = extract_enum("selection", params_file, selection_types);
   tournament_n = parse_int(extract_option(params_file));
   if (selection_type == "roulette")
-    selection = RouletteSelection(chromosome_length);
+    selection = Roulette(chromosome_length);
   else if (selection_type == "tournament")
-    selection = TournamentSelection(chromosome_length, tournament_n);
+    selection = Tournament(chromosome_length, tournament_n);
   else if (selection_type == "SUS")
-    selection = SUS_Selection(chromosome_length);
+    selection = SUS(chromosome_length);
   
   float fitness_scaling_constant = parse_float(extract_option(params_file));
   string fitness_func = extract_enum("fitness", params_file, fitness_types);
@@ -79,7 +84,7 @@ void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
   id = extract_option(params_file);
 
   //define a termination criterion
-  terminatefitness = 1065; // why this number ???????? TODO: clarify, or parameterize it
+  terminatefitness = 1065; // why this number ??? TODO: clarify, or parameterize it
 
   dump();
 }

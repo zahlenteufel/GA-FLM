@@ -1,10 +1,14 @@
 #ifndef FITNESS_H
 #define FITNESS_H
 
-#include "Chromosome.h"
 #include <string>
+#include <vector>
 
 using namespace std;
+
+typedef vector<int> Chromosome;
+typedef vector<Chromosome> Population;
+
 
 class Fitness {
 
@@ -24,9 +28,9 @@ public:
   BIC(float fitness_scaling_constant, int k) :
     fitness_scaling_constant(fitness_scaling_constant), k(k) {};
 
-  virtual float evaluate(Chromosome& c) const overrides;
+  float evaluate(Chromosome& c) const override;
 
-  virtual string name() const overrides;
+  string name() const override;
 
 private:
 
@@ -44,9 +48,9 @@ public:
   InversePPL(float fitness_scaling_constant) :
     fitness_scaling_constant(fitness_scaling_constant) {};
 
-  virtual float evaluate(Chromosome& c) const overrides;
+  float evaluate(Chromosome& c) const override;
 
-  virtual string name() const overrides;
+  string name() const override;
 
 private:
 

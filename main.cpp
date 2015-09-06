@@ -1,5 +1,5 @@
 #include <iostream>
-// #include "GA_FLM.h"
+#include "GA.h"
 #include "GA_Conf.h"
 #include "util.h"
 
@@ -13,16 +13,13 @@ string seedfile = DEFAULT_SEED, flmparamfile = DEFAULT_FLMPARAM, gaparamfile = D
 int main(int argc, char* argv[]) {
   parse_arguments(argc, argv);
   
-  // sys("date");
-  
-  GA_Conf ga_conf(gaparamfile, seedfile);
-  // FLM_Conf flm_conf(flmparamfile);
+  FLM_Conf flm_conf(flmparamfile);
+  // GA_Conf ga_conf(flm_conf.chromosome_length, gaparamfile, seedfile);
 
   // GA_FLM ga_flm(ga_conf, flm_conf);
 
   // ga_flm.search();
   
-  // sys("date");
   return 0;
 }
 

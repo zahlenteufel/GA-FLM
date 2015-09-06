@@ -16,12 +16,12 @@
  *
  */
 
-#ifndef _GENE_H
-#define _GENE_H
+#ifndef GENE_H
+#define GENE_H
 
 #include <vector>
 #include <string>
-#include "FLM_Conf.h"
+#include "../FLM_Conf.h"
 
 using namespace std;
 

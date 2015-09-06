@@ -30,7 +30,7 @@
  */
 
 #include <iostream>
-#include "util.h"
+// #include "../util.h"
 #include "Node.h"
 
 Node::Node(vector<string> factors) : _skip(false), _activeFactors(factors) {
@@ -74,17 +74,17 @@ vector<int> Node::children() {
   return _child;
 }
 
-void Node::printDebug() {
-  cout << "Node: level=" << _level << endl;
-  cout << "Factors: ";
-  prs(_activeFactors);
-  cout << "Drop: ";
-  prs(_dropList);
-  cout << "Child: " ;
-  prv(_child);
-  cout << "Skip: " <<  _skip << endl;
-  cout << endl;
-}
+// void Node::printDebug() {
+//   cout << "Node: level=" << _level << endl;
+//   cout << "Factors: ";
+//   prs(_activeFactors);
+//   cout << "Drop: ";
+//   prs(_dropList);
+//   cout << "Child: " ;
+//   prv(_child);
+//   cout << "Skip: " <<  _skip << endl;
+//   cout << endl;
+// }
 
 // Main function for printing a line the factor-file. 
 // The printed line represents the active factors, drop factors, discount options and gtmin, etc. of this node.

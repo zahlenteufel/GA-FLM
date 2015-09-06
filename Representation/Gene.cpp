@@ -36,10 +36,11 @@
 // gets the discount and gtmin according to a bit/integer position i in the gene
 string Gene::getSmoothOpt(int i) const {
   string opt1, opt2;
-      
+  
+  // TODO: implement get_or_default in flm_conf.smooth_len
   if (i >= 0 && i < flm_conf.smooth_len && i < int(flm_conf.discounts.size())) {
     opt1 = flm_conf.discounts[_smooth_opt[i]];
-    opt2 = itos(_smooth_opt[i + 1] + 1);
+    opt2 = to_string(_smooth_opt[i + 1] + 1);
   }
   else {
     opt1 = flm_conf.default_discount;

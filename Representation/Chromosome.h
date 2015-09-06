@@ -1,4 +1,4 @@
-#ifndef CHROMOSOME_H
+/*#ifndef CHROMOSOME_H
 #define CHROMOSOME_H
 
 #include <vector>
@@ -42,3 +42,4 @@ ostream& operator<<(ostream& stream, const Chromosome& chromosome) {
 }
 
 #endif
+*/

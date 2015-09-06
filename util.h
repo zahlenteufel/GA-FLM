@@ -31,7 +31,7 @@ using namespace std;
 void sys(const string& s);
 void sys(const char* s);
 
-string to_string(int i); // converts int into string
+// string to_string(int i); // converts int into string
 
 float parse_float(const string& s);
 int parse_int(const string& s);

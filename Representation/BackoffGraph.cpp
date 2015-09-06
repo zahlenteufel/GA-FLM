@@ -34,13 +34,15 @@
 #include <queue>
 #include <map>
 
-BackoffGraph::BackoffGraph(const string& factor_to_predict, const string& default_discount) :
-    factor_to_predict(factor_to_predict), default_discount(default_discount) {
+BackoffGraph::BackoffGraph(const FLM_Conf& flm_conf, const vector<int>& indv) : 
+  g(flm_conf, indv), factor_to_predict(flm_conf.factor_to_predict), default_discount(flm_conf.default_discount) {
+  // factor_to_predict = flm_conf.factor_to_predict;
+  // default_discount = flm_conf.default_discount;
   grow();
 }
 
 BackoffGraph::~BackoffGraph() {
-  for (Node* node : _nodes)
+  for (Node* node : nodes)
     delete node;
 }
 
@@ -61,18 +63,18 @@ string transform_factor_tag(const string orig) {
 // Main function call in charge of printing the factor file for a backoff graph.
 // This is done by recursively calling Node::printFile for each Node in the Backoff graph.
 // The smoothing options are implemented in the end by addOptions().
-string BackoffGraph::factor_file() {
-  // If _nodes is empty, write no file
-  if (!_nodes.empty()) {
+string BackoffGraph::factor_file(const string& ga_path, const string& basename) {
+  // If nodes is empty, write no file
+  if (!nodes.empty()) {
     queue<int> que;
     string ffile = "1\n";
     ffile += factor_to_predict + ": ";
     int count = 0; //counts the number of lines for backoff
 
-    Node* root = _nodes[0];
+    Node* root = nodes[0];
 
     vector<string> startFactors = root->activeFactors();
-    ffile += " " + itos(startFactors.size()) + " ";
+    ffile += " " + to_string(startFactors.size()) + " ";
 
     for (string factor : startFactors)
       ffile += transform_factor_tag(factor) + " ";
@@ -92,7 +94,7 @@ string BackoffGraph::factor_file() {
       int n = que.front(); // note that n is an index to a Node, not the node or node reference.
       que.pop(); // pop first element off the queue
       
-      Node* node = _nodes[n];
+      Node* node = nodes[n];
 
       // get the line to print out for this node
       string ffile_line = node->printFile();
@@ -119,7 +121,7 @@ string BackoffGraph::factor_file() {
 
     // Factor-file requires us to indicate the number of lines in backoff, so here it is.
     string::size_type pos = ffile.find(string("INSERT_NUMBER_HERE"));
-    ffile.replace(pos, 18, itos(count + 1));
+    ffile.replace(pos, 18, to_string(count + 1));
 
     // Add smoothing options by changing the ffile string
     string newffile = add_options(ffile);
@@ -181,13 +183,13 @@ void BackoffGraph::use_rule(Node* n) {
       sum += rules[i];
       // RuleBit=1, so grammar rule generates child node
       if (rules[i] == 1) {
-        // j is index into _nodes. It is used in MakeChild node to tell the current node the index of its children
+        // j is index into nodes. It is used in MakeChild node to tell the current node the index of its children
         Node* child = n->makeChild(i, j);
-        _nodes.push_back(child);
+        nodes.push_back(child);
         j++;
         // recursion if needed
         if (lev > 2) {
-          useRule(child);
+          use_rule(child);
         }
         else {
           vector<string> factor = child->activeFactors();
@@ -213,11 +215,11 @@ void BackoffGraph::skip(Node* n, int lev) {
   for (int i = 0; i < lev; i++) {
     // grammar rule generates child node
     Node* child = n->makeChild(i,j);
-    _nodes.push_back(child);
+    nodes.push_back(child);
     j++;
     // recursion if needed
     if (lev > 2) {
-      useRule(child);
+      use_rule(child);
     }
     else {
       vector<string> factor = child->activeFactors();
@@ -232,11 +234,11 @@ void BackoffGraph::grow() {
   vector<string> factors = g.allFactors();
   if (!factors.empty()) {
     Node* root = new Node(factors);
-    _nodes.push_back(root); 
-    j = 1; // index for all nodes in _nodes
-    useRule(root);
+    nodes.push_back(root); 
+    j = 1; // index for all nodes in nodes
+    use_rule(root);
   }
   // else {
-  //   // Grow nothing. _nodes vector remain empty
+  //   // Grow nothing. nodes vector remain empty
   // }
 }

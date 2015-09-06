@@ -33,27 +33,30 @@
 #include <sstream>
 #include <iostream>
 #include <unistd.h>
+#include <algorithm>
 #include "util.h"
 
-// converts int into string
-string itos(int i) {
-  stringstream s;
-  s << i;
-  return s.str();
-}
+#define isIn(c, e) (find((c).begin(), (c).end(), e) != (c).end())
+
+// // converts int into string -->already exists in <string> :D
+// string to_string(int i) {
+//   stringstream s;
+//   s << i;
+//   return s.str();
+// }
 
 // Prints vectors (Helper)
-void prv(vector<int> v) {
-  for (int x : v)
-    cout << x << " ";
-  cout << endl;
-}
+// void prv(vector<int> v) {
+//   for (int x : v)
+//     cout << x << " ";
+//   cout << endl;
+// }
 
-void prs(vector<string> v) {
-  for (string s : v)
-    cout << s << " ";
-  cout << endl;
-}
+// void prs(vector<string> v) {
+//   for (string s : v)
+//     cout << s << " ";
+//   cout << endl;
+// }
 
 // Splits a string into several a vector of smaller strings based on the delimiter.
 vector<string> split(const string& input, const string& delimiter) {

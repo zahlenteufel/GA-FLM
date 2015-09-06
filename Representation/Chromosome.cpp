@@ -1,9 +1,9 @@
-#include "Chromosome.h"
+/* #include "Chromosome.h"
 
 string Chromosome::repr() const {
   string s; 
   for (auto gene : genes)
-    s += itos(gene);
+    s += to_string(gene);
   return s
 }
 
@@ -49,3 +49,4 @@ info Chromosome::ngram_compute_info(string key) {
   execute_fngram_commands(fngram_commands);
   collect_ppl();
 }
+*/

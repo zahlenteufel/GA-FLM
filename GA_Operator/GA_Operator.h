@@ -21,7 +21,13 @@
 #define GA_OPERATOR_H
 
 #include <random>
-#include "../Chromosome.h"
+#include <vector>
+
+using namespace std;
+
+typedef vector<int> Chromosome;
+typedef vector<Chromosome> Population;
+
 
 class GA_Operator {
 

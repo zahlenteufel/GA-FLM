@@ -1,6 +1,6 @@
 #include "FLM_Conf.h"
-#include "Gene.h"
-#include "BackoffGraph.h"
+#include "Representation/BackoffGraph.h"
+#include "util.h"
 
 FLM_Conf::FLM_Conf(string s) {
   parse_FLM_PARAMS_file(s);
@@ -99,12 +99,9 @@ string FLM_Conf::make_fngram_command(const string& filename, const string& ga_pa
 }
 
 void FLM_Conf::create_factor_file(const vector<int>& indv, const string& basename, const string& ga_path) const {
-  // for (int i = 0; i < max; i++)
-  //   cout << indv[i];
-  // for (int i = max; i < (max + smooth_len); i++)
-  //   cout << indv[i];
-  // cout << endl;
-  Gene gene(*this, indv);
-  BackoffGraph backoff_graph(gene);
-  backoff_graph.printFile(factor_to_predict, default_discount, ga_path, basename);
+  BackoffGraph backoff_graph(*this, indv);
+  string flmfile = ga_path + basename + ".flm";
+  ofstream outfile(flmfile.c_str());
+  string factor_file_content = backoff_graph.factor_file(ga_path, basename);
+  outfile << factor_file_content;
 }

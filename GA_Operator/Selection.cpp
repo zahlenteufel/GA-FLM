@@ -1,12 +1,12 @@
 #include "Selection.h"
 
-Population Roulette::do_selection(const Population& population) {
+Population Roulette::do_selection(const Population& population, float (*bar)(Chromosome) fitness) {
   Population new_population;
   vector<float> roulette_wheel(population.size());
-  float total_fitness = sum_fitness(population);
+  float total_fitness = sum_fitness(population, fitness);
 
   for (int i = 0; i < int(population.size()); i++) {
-    roulette_wheel[i] = population[i].fitness() / total_fitness;
+    roulette_wheel[i] = fitness(population[i]) / total_fitness;
     if (i > 0)
       roulette_wheel[i] += roulette_wheel[i - 1];
   }
@@ -23,19 +23,22 @@ Population Roulette::do_selection(const Population& population) {
   return new_population;
 }
 
-Population Tournament::do_selection(const Population& population) {
+Population Tournament::do_selection(const Population& population, float (*bar)(Chromosome) fitness) {
   Population new_population;
 
   while (new_population.size() < original_population.size()) {
     Population nrandom = sample_with_repetition(tournament_n, population);
-    Chromosome fittest = *max_element(nrandom.begin(), nrandom.end(), compare_fitness);
-    new_population.append(fittest);
+    float best_index = 0;
+    for (int i = 1; i < int(nrandom.size()); i++)
+      if (fitness(nrandom[i]) > fitness(best_index))
+        best_index = i;
+    new_population.append(nrandom[best_index]);
   }
   return new_population;
 }
 
-Population SUS::do_selection(const Population& population) {
-  vector<float> standard_fitness = standardized_fitness(population);
+Population SUS::do_selection(const Population& population, float (*bar)(Chromosome) fitness) {
+  vector<float> standard_fitness = standardized_fitness(population, fitness);
   float flindex = random_number_in_01();
   int picked_index = 1;
   for (int i = 0; i < int(population.size()) && picked_index <= int(population.size()); i++) {
