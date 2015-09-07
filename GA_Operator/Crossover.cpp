@@ -19,16 +19,14 @@ void Crossover::do_crossover(Population& population) {
 }
 
 void Uniform::do_crossover(Chromosome& c1, Chromosome& c2) {
-  int chromosome_length = c1.size();
-  for (int j = 0; j < chromosome_length; j++)
+  for (int j = 0; j < flm_conf.chromosome_length; j++)
     if (random_bit())
       swap(c1[j], c2[j]);
 }
 
 void OnePoint::do_crossover(Chromosome& c1, Chromosome& c2) {
-  int chromosome_length = c1.size();
   // swap tails
-  for (int i = pick_point(); i < chromosome_length; i++)
+  for (int i = pick_point(); i < flm_conf.chromosome_length; i++)
     swap(c1[i], c2[i]);
 }
 
@@ -40,7 +38,7 @@ void TwoPoint::do_crossover(Chromosome& c1, Chromosome& c2) {
 }
 
 int Crossover::pick_point() {
-  return random_int(chromosome_length);
+  return random_int(flm_conf.chromosome_length);
 }
 
 pair<int, int> Crossover::pick_range() {

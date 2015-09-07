@@ -45,23 +45,16 @@ private:
   const GA_Conf& ga_conf;
   const FLM_Conf& flm_conf;
 
-  int MAXPOP;
-  int MAXGEN;
   float convergence_threshold;
-  const int MAXBITS = 150;
-  const int MAXSTORAGE = 32768;
-
-  void create_new_generation();
-  void create_initial_population();
-  bool termination_criteria_satisfied();
-
   int generation_number;
-
   Population population;
   vector<float> fitness;
   Chromosome historic_best;
   float historic_best_fitness;
   
+  void create_new_generation();
+  void create_initial_population();
+  bool termination_criteria_satisfied() const;
   float average_fitness() const;
   float best_fitness() const;
 
@@ -70,12 +63,12 @@ private:
     int complexity;
   };
 
-  info parse_info(const string& evallog_filename, const string& complexity_filename);
-  info evaluate(const Chromosome& chromosome);
-  info evaluate(const string& filename);
+  info parse_info(const string& evallog_filename, const string& complexity_filename) const;
+  info evaluate(const Chromosome& chromosome) const;
+  info evaluate(const string& filename) const;
   mutable map<string, info> cache;
 
-  void create_factor_file(const Chromosome& chromosome);
+  void create_factor_file(const Chromosome& chromosome) const;
   void compute_fitness_of_each_gene();
   bool has_converged() const;
   void debug_algorithm() const;

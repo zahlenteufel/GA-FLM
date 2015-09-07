@@ -22,6 +22,7 @@
 
 #include <random>
 #include <vector>
+#include "../FLM_Conf.h"
 
 using namespace std;
 
@@ -33,7 +34,7 @@ class GA_Operator {
 
 public:
 
-  GA_Operator(int chromosome_length) : chromosome_length(chromosome_length) {};
+  GA_Operator(const FLM_Conf& flm_conf) : flm_conf(flm_conf) {};
 
   // void be_elitist(); // <-- TODO: change this name...
 
@@ -49,7 +50,7 @@ protected:
 
   int random_int(int max);
 
-  int chromosome_length;
+  const FLM_Conf& flm_conf;
 
 };
 

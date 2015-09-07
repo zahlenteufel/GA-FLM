@@ -7,7 +7,7 @@ class Selection : public GA_Operator {
 
 public:
   
-  Selection(int chromosome_length) : GA_Operator(chromosome_length) {};
+  Selection(const FLM_Conf& flm_conf) : GA_Operator(flm_conf) {};
 
   virtual Population do_selection(const Population& population, const vector<float>& fitness) = 0;
 
@@ -21,8 +21,8 @@ class Roulette : public Selection {
 
 public:
 
-  Roulette(int chromosome_length) :
-    Selection(chromosome_length) {};
+  Roulette(const FLM_Conf& flm_conf) :
+    Selection(flm_conf) {};
 
   virtual Population do_selection(const Population& population, const vector<float>& fitness) override;
 
@@ -32,8 +32,8 @@ class Tournament : public Selection {
 
 public:
 
-  Tournament(int chromosome_length, int tournament_n) :
-    Selection(chromosome_length), tournament_n(tournament_n) {};
+  Tournament(const FLM_Conf& flm_conf, int tournament_n) :
+    Selection(flm_conf), tournament_n(tournament_n) {};
 
   virtual Population do_selection(const Population& population, const vector<float>& fitness) override;
 
@@ -47,8 +47,8 @@ class SUS : public Selection {
 
 public:
 
-  SUS(int chromosome_length) :
-    Selection(chromosome_length) {};
+  SUS(const FLM_Conf& flm_conf) :
+    Selection(flm_conf) {};
 
   virtual Population do_selection(const Population& population, const vector<float>& fitness) override;
 

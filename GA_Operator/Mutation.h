@@ -7,8 +7,8 @@ class Mutation : GA_Operator {
 
 public:
 
-  Mutation(int chromosome_length, float probability_of_mutation) :
-  	GA_Operator(chromosome_length), probability_of_mutation(probability_of_mutation) {};
+  Mutation(const FLM_Conf& flm_conf, float probability_of_mutation) :
+  	GA_Operator(flm_conf), probability_of_mutation(probability_of_mutation) {};
 
   void do_mutation(vector<Chromosome>& population);
 

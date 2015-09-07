@@ -25,12 +25,14 @@ public:
 
   ~GA_Conf();
 
-  float compute_fitness(float ppl, float logprob, float complexity) const;
+  // TODO: create a method build_GA();
 
   void dump() const;
+  float compute_fitness(float ppl, float logprob, float complexity) const;
 
-  int chromosome_length;
   int population_size;
+
+  float terminate_fitness;
   int maximum_number_of_generations;
   
   Crossover* crossover;
@@ -40,15 +42,13 @@ public:
 
   Fitness* fitness_function;
 
-  float terminatefitness;
-
   string ga_path;
 
   string id;
 
 private:
 
-  void parse_GA_PARAMS_file(const string& gaparamsfile);
+  void parse_GA_PARAMS_file(const FLM_Conf& flm_conf, const string& gaparamfile);
 
 };
 

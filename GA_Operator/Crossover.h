@@ -12,8 +12,8 @@ class Crossover : public GA_Operator {
 
 public:
 
-  Crossover(int chromosome_length, float crossover_probability) : 
-    GA_Operator(chromosome_length),
+  Crossover(const FLM_Conf& flm_conf, float crossover_probability) : 
+    GA_Operator(flm_conf),
     crossover_probability(crossover_probability) {};
 
   void do_crossover(Population&);
@@ -36,8 +36,8 @@ class Uniform : public Crossover {
 
 public:
 
-  Uniform(int chromosome_length, float crossover_probability) : 
-    Crossover(chromosome_length, crossover_probability) {};
+  Uniform(const FLM_Conf& flm_conf, float crossover_probability) : 
+    Crossover(flm_conf, crossover_probability) {};
 
   void do_crossover(Chromosome&, Chromosome&) override;
 
@@ -47,8 +47,8 @@ class OnePoint : public Crossover {
 
 public:
 
-  OnePoint(int chromosome_length, float crossover_probability) : 
-    Crossover(chromosome_length, crossover_probability) {};
+  OnePoint(const FLM_Conf& flm_conf, float crossover_probability) : 
+    Crossover(flm_conf, crossover_probability) {};
 
   void do_crossover(Chromosome&, Chromosome&) override;
 
@@ -58,8 +58,8 @@ class TwoPoint : public Crossover {
 
 public:
 
-  TwoPoint(int chromosome_length, float crossover_probability) : 
-    Crossover(chromosome_length, crossover_probability) {};
+  TwoPoint(const FLM_Conf& flm_conf, float crossover_probability) : 
+    Crossover(flm_conf, crossover_probability) {};
 
   void do_crossover(Chromosome&, Chromosome&) override;
 

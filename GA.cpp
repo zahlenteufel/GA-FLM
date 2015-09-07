@@ -47,7 +47,7 @@ void GA::search() {
   cerr << "Number of generations processed : " << generation_number << endl;
 }
 
-GA::info GA::parse_info(const string& evallog_filename, const string& complexity_filename) {
+GA::info GA::parse_info(const string& evallog_filename, const string& complexity_filename) const {
   GA::info chromosome_info;
   open(evallog_filename, eval_logfile);
   
@@ -83,7 +83,7 @@ GA::info GA::parse_info(const string& evallog_filename, const string& complexity
   return chromosome_info;
 }
 
-GA::info GA::evaluate(const Chromosome& chromosome) {
+GA::info GA::evaluate(const Chromosome& chromosome) const {
   string chromosome_str = to_string(chromosome);
   auto it = cache.find(chromosome_str);
   if (it != cache.end())
@@ -102,7 +102,7 @@ GA::info GA::evaluate(const Chromosome& chromosome) {
   return cache[chromosome_str] = chromosome_info;
 }
 
-void GA::create_factor_file(const Chromosome& chromosome) {
+void GA::create_factor_file(const Chromosome& chromosome) const {
   flm_conf.create_factor_file(chromosome, ga_conf.ga_path);
 }
 
@@ -122,8 +122,9 @@ bool GA::has_converged() const {
 }
 
 void GA::debug_algorithm() const {
-  cerr << "Generation : " << generation_number << "\n";
-  cerr << "Best: " << historic_best_fitness << "\n";
+  cerr << "Generation : " << generation_number << endl;
+  cerr << "- Best: " << historic_best_fitness << endl;
+  cerr << "- Best Chromosome: " << to_string(historic_best) << endl;
 }
 
 float GA::average_fitness() const {
@@ -153,9 +154,9 @@ void GA::create_initial_population() {
 }
 
 
-bool GA::termination_criteria_satisfied() {
+bool GA::termination_criteria_satisfied() const {
   string reason;
-  if (historic_best_fitness >= ga_conf.terminatefitness)
+  if (historic_best_fitness >= ga_conf.terminate_fitness)
     reason = "desired fitness achieved";
   else if (has_converged())
     reason = "population has converged";

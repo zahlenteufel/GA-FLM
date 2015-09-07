@@ -7,14 +7,9 @@ class Initializator : GA_Operator {
 
 public:
 
-  Initializator(
-  	int chromosome_length,
-  	int population_size,
-  	const string& seed_filename,
-  	int smooth_len,
-  	int discounts_size,
-  	int cutoff_max
-  );
+  Initializator(const FLM_Conf& flm_conf, int population_size, const string& seed_filename) :
+    GA_Operator(flm_conf), population_size(population_size), seed_filename(seed_filename)
+    {};
 
   Population do_initialize();
 
@@ -23,8 +18,8 @@ private:
   Chromosome from_seed(const string& seed);
   string random_seed();
 
-  int population_size, smooth_len, discounts_size, cutoff_max;
-  const string& seed_filename;
+  const string seed_filename;
+  int population_size;
 
 };
 

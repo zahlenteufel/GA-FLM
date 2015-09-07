@@ -48,7 +48,6 @@ int GA_Operator::random_int(int max) {
   return distribution(GA_Operator::rng);
 }
 
-
 // void GA_Operator::be_elitist() {
 //   int weakest_index = 0, flag = 0;
 //   int bestsofar_dec = 0, oldpop_dec = 0;

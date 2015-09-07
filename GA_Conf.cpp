@@ -8,16 +8,8 @@ GA_Conf::GA_Conf(const FLM_Conf& flm_conf, const string& gaparamfile, const stri
   selection = nullptr;
   mutation = nullptr;
   fitness_function = nullptr;
-  chromosome_length = flm_conf.chromosome_length;
-  parse_GA_PARAMS_file(gaparamfile);
-  initializator = new Initializator(
-    chromosome_length,
-    population_size,
-    seed_filename,
-    flm_conf.smooth_len,
-    flm_conf.discounts.size(),
-    flm_conf.cutoff_max
-  );
+  parse_GA_PARAMS_file(flm_conf, gaparamfile);
+  initializator = new Initializator(flm_conf, population_size, seed_filename);
 }
 
 GA_Conf::~GA_Conf() {
@@ -28,7 +20,7 @@ GA_Conf::~GA_Conf() {
   delete initializator;
 }
 
-void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
+void GA_Conf::parse_GA_PARAMS_file(const FLM_Conf& flm_conf, const string& gaparamfile) {
   ifstream params_file(gaparamfile.c_str());
 
   population_size = parse_int(extract_option(params_file));
@@ -61,29 +53,29 @@ void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
     exit(1);
   }
 
-  mutation = new Mutation(chromosome_length, mutation_probability);
+  mutation = new Mutation(flm_conf, mutation_probability);
 
   string crossover_type = extract_option(params_file);
 
   cout << crossover_type << endl;
 
   if (crossover_type == "1-point")
-    crossover = new OnePoint(chromosome_length, crossover_probability); // ????
+    crossover = new OnePoint(flm_conf, crossover_probability);
   else if (crossover_type == "2-point")
-    crossover = new TwoPoint(chromosome_length, crossover_probability);
+    crossover = new TwoPoint(flm_conf, crossover_probability);
   else if (crossover_type == "uniform")
-    crossover = new Uniform(chromosome_length, crossover_probability);
+    crossover = new Uniform(flm_conf, crossover_probability);
   else
     throw "Invalid crossover";
   
   string selection_type = extract_option(params_file);
   int tournament_n = parse_int(extract_option(params_file));
   if (selection_type == "roulette")
-    selection = new Roulette(chromosome_length);
+    selection = new Roulette(flm_conf);
   else if (selection_type == "tournament")
-    selection = new Tournament(chromosome_length, tournament_n);
+    selection = new Tournament(flm_conf, tournament_n);
   else if (selection_type == "SUS")
-    selection = new SUS(chromosome_length);
+    selection = new SUS(flm_conf);
   else
     throw "Invalid selection";
   
@@ -101,7 +93,7 @@ void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {
   id = extract_option(params_file);
 
   //define a termination criterion
-  terminatefitness = 1065; // why this number ??? TODO: clarify, or parameterize it
+  terminate_fitness = 1065; // why this number ??? TODO: clarify, or parameterize it
 
   dump();
 }
