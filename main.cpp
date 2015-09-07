@@ -1,8 +1,9 @@
 #include <iostream>
 #include "GA.h"
 #include "GA_Conf.h"
+#include "GA_Operator/GA_Operator.h"
 #include "util.h"
-
+#include <chrono>
 
 #define DEFAULT_SEED "example/SEED"
 #define DEFAULT_FLMPARAM "example/FLM-PARAMS"
@@ -18,8 +19,14 @@ int main(int argc, char* argv[]) {
     GA_Conf ga_conf(flm_conf, gaparamfile, seedfile);
     GA ga(ga_conf, flm_conf);
 
+    // TODO: set a fixed random seed with a command-line argument for reproducibility
+    unsigned random_seed = chrono::system_clock::now().time_since_epoch().count();
+    GA_Operator::set_random_seed(random_seed);
+
     // ga_flm.search();
   } catch (char const* s) {
+    throw string(s);
+  } catch (string s) {
     cerr << "ERROR: " << s << endl;
     return 1;
   }

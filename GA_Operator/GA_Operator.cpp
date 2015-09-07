@@ -25,28 +25,27 @@
 */
 
 #include "GA_Operator.h"
-#include <cmath>
-#include <chrono>
 
-GA_Operator::GA_Operator(int chromosome_length) : chromosome_length(chromosome_length) {
-  unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-  rng = default_random_engine(seed);
+default_random_engine GA_Operator::rng;
+
+void GA_Operator::set_random_seed(unsigned seed) {
+  GA_Operator::rng = default_random_engine(seed);
 }
 
 //return a random number between 0 and 1
 float GA_Operator::random_number_in_01() {
   uniform_real_distribution<float> rd(0, 1);
-  return rd(rng);
+  return rd(GA_Operator::rng);
 }
 
 int GA_Operator::random_bit() {
   bernoulli_distribution distribution(0.5);
-  return distribution(rng);
+  return distribution(GA_Operator::rng);
 }
 
 int GA_Operator::random_int(int max) {
   uniform_int_distribution<int> distribution(0, max - 1);
-  return distribution(rng);
+  return distribution(GA_Operator::rng);
 }
 
 

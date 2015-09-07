@@ -33,21 +33,23 @@ class GA_Operator {
 
 public:
 
-  GA_Operator(int chromosome_length);
+  GA_Operator(int chromosome_length) : chromosome_length(chromosome_length) {};
 
   // void be_elitist(); // <-- TODO: change this name...
 
-  //return a random number between 0 and 1
+  static void set_random_seed(unsigned seed);
+
+protected:
+
+  static default_random_engine rng;
+
   float random_number_in_01();
 
   int random_bit();
 
   int random_int(int max);
 
-protected:
-
   int chromosome_length;
-  default_random_engine rng;
 
 };
 
