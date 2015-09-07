@@ -1,6 +1,6 @@
-Population Size           = 6
-Maximum no of generations = 5
-P(Crossover)              = 0.9
+Population Size           = 40
+Maximum no of generations = 100
+P(Crossover)              = 0.7
 P(Mutation)               = 0.01
 Crossover type            = hybrid
 Selection type            = roulette

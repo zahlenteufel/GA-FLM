@@ -12,6 +12,14 @@
 void parse_arguments(int argc, char* argv[]);
 string seedfile = DEFAULT_SEED, flmparamfile = DEFAULT_FLMPARAM, gaparamfile = DEFAULT_GAPARAM; 
 
+void backup_best(string path, string name) {
+  string backup_command = 
+    "ln " + path + name + ".flm " + path + "best.flm;" +
+    "ln " + path + name + ".count.gz " + path + "best.count.gz;" +
+    "ln " + path + name + ".lm.gz " + path + "best.lm.gz;";
+  sys(backup_command);
+}
+
 int main(int argc, char* argv[]) {
   try {
     parse_arguments(argc, argv);
@@ -23,7 +31,9 @@ int main(int argc, char* argv[]) {
     unsigned random_seed = chrono::system_clock::now().time_since_epoch().count();
     GA_Operator::set_random_seed(random_seed);
 
-    ga.search();
+    Chromosome best = ga.search();
+    backup_best(ga_conf.ga_path, to_string(best));
+
   } catch (char const* s) {
     cerr << "ERROR: " << s << endl;
     return 1;

@@ -39,12 +39,16 @@ GA::GA(const GA_Conf& ga_conf, const FLM_Conf& flm_conf, float convergence_thres
   convergence_threshold = convergence_threshold;
 }
 
-void GA::search() {
+Chromosome GA::search(float& best_fitness, float& best_perplexity) {
   do {
     create_new_generation();
   } while (!termination_criteria_satisfied());
 
   cerr << "Number of generations processed : " << generation_number << endl;
+  info best_info = evaluate(historic_best);
+  best_fitness = best_info.fitness;
+  best_perplexity = best_info.perplexity;
+  return historic_best;
 }
 
 GA::info GA::parse_info(const string& evallog_filename, const string& complexity_filename) const {

@@ -38,7 +38,7 @@ public:
 
   GA(const GA_Conf& ga_conf, const FLM_Conf& flm_conf, float convergence_threshold = 0.001);
 
-  void search();
+  Chromosome search(float& best_fitness, float& best_perplexity);
 
 private:
 
