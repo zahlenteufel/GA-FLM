@@ -30,6 +30,7 @@ default_random_engine GA_Operator::rng;
 
 void GA_Operator::set_random_seed(unsigned seed) {
   GA_Operator::rng = default_random_engine(seed);
+  cerr << "Initialized with random seed " << seed << endl;
 }
 
 //return a random number between 0 and 1
