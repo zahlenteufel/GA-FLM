@@ -30,8 +30,21 @@ string Initializator::random_seed() {
   return s;
 }
 
-Population Initializator::do_initialize() {
-  Population result;
+string Initializator::debug_seed(const string& seed) const {
+  stringstream ss;
+  int len1 = flm_conf.chromosome_length - flm_conf.smooth_len; 
+  for (int i = 0; i < len1; i++)
+    ss << seed[i];
+  ss << "-";
+  for (int j = len1; j < flm_conf.chromosome_length; j += 2) { 
+    if (j > len1)
+      ss << ".";
+    ss << seed[j] << seed[j + 1];
+  }
+  return ss.str();
+}
+
+void Initializator::do_initialize(Population& population) {
   ifstream infile(seed_filename.c_str());
 
   if (!infile)
@@ -54,7 +67,9 @@ Population Initializator::do_initialize() {
   }
 
   for (string seed : seeds)
-    result.push_back(from_seed(seed)); 
+    population.push_back(from_seed(seed)); 
 
-  return result;
+  cerr << "Initial Population:\n";
+  for (string seed : seeds)
+    cerr << " " << debug_seed(seed) << "\n";
 }

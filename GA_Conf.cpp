@@ -65,6 +65,8 @@ void GA_Conf::parse_GA_PARAMS_file(const FLM_Conf& flm_conf, const string& gapar
     crossover = new TwoPoint(flm_conf, crossover_probability);
   else if (crossover_type == "uniform")
     crossover = new Uniform(flm_conf, crossover_probability);
+  else if (crossover_type == "hybrid")
+    crossover = new Hybrid(flm_conf, crossover_probability);
   else
     throw "Invalid crossover";
   

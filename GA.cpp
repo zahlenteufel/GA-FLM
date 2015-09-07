@@ -86,8 +86,9 @@ GA::info GA::parse_info(const string& evallog_filename, const string& complexity
 GA::info GA::evaluate(const Chromosome& chromosome) const {
   string chromosome_str = to_string(chromosome);
   auto it = cache.find(chromosome_str);
-  if (it != cache.end())
+  if (it != cache.end()) {
     return it->second;
+  }
 
   create_factor_file(chromosome);
   sys(flm_conf.make_fngram_command(chromosome_str, ga_conf.ga_path));
@@ -96,6 +97,7 @@ GA::info GA::evaluate(const Chromosome& chromosome) const {
     ga_conf.ga_path + chromosome_str + ".EvalLog",
     ga_conf.ga_path + chromosome_str + ".complexity"
   );
+  
   chromosome_info.fitness = ga_conf.fitness_function->evaluate(
     chromosome_info.logprob, chromosome_info.perplexity, chromosome_info.complexity);
   
@@ -109,7 +111,8 @@ void GA::create_factor_file(const Chromosome& chromosome) const {
 void GA::compute_fitness_of_each_gene() {
   for (int i = 0; i < int(population.size()); i++) {
     fitness[i] = evaluate(population[i]).fitness;
-     // evaluate() calls fngram and all that stuff if necessary..
+    // evaluate() calls fngram and all that stuff if necessary..
+    cerr << "fitness[" << i << "] = " << fitness[i] << endl;
     if (fitness[i] > historic_best_fitness) {
       historic_best = population[i];
       historic_best_fitness = fitness[i];
@@ -123,8 +126,8 @@ bool GA::has_converged() const {
 
 void GA::debug_algorithm() const {
   cerr << "Generation : " << generation_number << endl;
-  cerr << "- Best: " << historic_best_fitness << endl;
-  cerr << "- Best Chromosome: " << to_string(historic_best) << endl;
+  cerr << " Best Fitness: " << historic_best_fitness << endl;
+  cerr << " Best Chromosome: " << to_string(historic_best) << endl;
 }
 
 float GA::average_fitness() const {
@@ -150,7 +153,8 @@ void GA::create_new_generation() {
 
 void GA::create_initial_population() {
   generation_number = 0;
-  population = ga_conf.initializator->do_initialize();
+  ga_conf.initializator->do_initialize(population);
+  fitness = vector<float>(population.size());
 }
 
 
@@ -165,6 +169,6 @@ bool GA::termination_criteria_satisfied() const {
   else
     return false;
 
-  cerr << "terminating GA: " << reason << endl;
+  cerr << "Search Finished: " << reason << endl;
   return true;
 }

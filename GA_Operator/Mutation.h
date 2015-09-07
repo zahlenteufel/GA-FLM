@@ -10,9 +10,13 @@ public:
   Mutation(const FLM_Conf& flm_conf, float probability_of_mutation) :
   	GA_Operator(flm_conf), probability_of_mutation(probability_of_mutation) {};
 
-  void do_mutation(vector<Chromosome>& population);
+  void do_mutation(Population& population);
 
 private:
+
+  void do_mutation(Chromosome& c);
+
+  int perturb_smooth_option(int smooth_option);
 
   float probability_of_mutation;
 

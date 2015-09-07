@@ -13,12 +13,11 @@ class Crossover : public GA_Operator {
 public:
 
   Crossover(const FLM_Conf& flm_conf, float crossover_probability) : 
-    GA_Operator(flm_conf),
-    crossover_probability(crossover_probability) {};
+    GA_Operator(flm_conf), crossover_probability(crossover_probability) {};
 
   void do_crossover(Population&);
 
-  virtual void do_crossover(Chromosome&, Chromosome&) = 0;
+  virtual vector<bool> do_crossover(Chromosome&, Chromosome&) = 0;
 
 protected:
 
@@ -26,9 +25,20 @@ protected:
 
   bool decide_to_do_crossover();
 
-  int pick_point();
+  int pick_point(int _max = 1000);
 
-  pair<int, int> pick_range();
+  pair<int, int> pick_range(int _max = 1000);
+
+};
+
+class Hybrid : public Crossover {
+
+public:
+
+  Hybrid(const FLM_Conf& flm_conf, float crossover_probability) : 
+    Crossover(flm_conf, crossover_probability) {};
+
+  vector<bool> do_crossover(Chromosome&, Chromosome&) override;
 
 };
 
@@ -39,7 +49,7 @@ public:
   Uniform(const FLM_Conf& flm_conf, float crossover_probability) : 
     Crossover(flm_conf, crossover_probability) {};
 
-  void do_crossover(Chromosome&, Chromosome&) override;
+  vector<bool> do_crossover(Chromosome&, Chromosome&) override;
 
 };
 
@@ -50,7 +60,7 @@ public:
   OnePoint(const FLM_Conf& flm_conf, float crossover_probability) : 
     Crossover(flm_conf, crossover_probability) {};
 
-  void do_crossover(Chromosome&, Chromosome&) override;
+  vector<bool> do_crossover(Chromosome&, Chromosome&) override;
 
 };
 
@@ -61,7 +71,7 @@ public:
   TwoPoint(const FLM_Conf& flm_conf, float crossover_probability) : 
     Crossover(flm_conf, crossover_probability) {};
 
-  void do_crossover(Chromosome&, Chromosome&) override;
+  vector<bool> do_crossover(Chromosome&, Chromosome&) override;
 
 };
 

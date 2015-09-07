@@ -11,10 +11,11 @@ public:
     GA_Operator(flm_conf), population_size(population_size), seed_filename(seed_filename)
     {};
 
-  Population do_initialize();
+  void do_initialize(Population&);
 
 private:
 
+  string debug_seed(const string& seed) const;
   Chromosome from_seed(const string& seed);
   string random_seed();
 
