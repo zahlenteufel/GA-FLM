@@ -16,4 +16,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
-	rm -v -f *.o GA_Operator/*.o Representation/*.o $(EXECUTABLE)
+	rm -v -f *.o GA_Operator/*.o Representation/*.o

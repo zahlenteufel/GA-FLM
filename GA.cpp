@@ -134,6 +134,18 @@ float GA::average_fitness() const {
   return accumulate(fitness.begin(), fitness.end(), 0.0) / fitness.size();
 }
 
+int minimum_index(const vector<float>& v) {
+  return min_element(v.begin(), v.end()) - v.begin();
+}
+
+void GA::do_elitist_replace() {
+  if (!isIn(population, historic_best)) {
+    int min_index = minimum_index(fitness);
+    population[min_index] = historic_best;
+    fitness[min_index] = historic_best_fitness;
+  }
+}
+
 void GA::create_new_generation() {
   if (population.empty()) {
     create_initial_population();
@@ -141,7 +153,7 @@ void GA::create_new_generation() {
     ga_conf.selection->do_selection(population, fitness);
     ga_conf.crossover->do_crossover(population);
     ga_conf.mutation->do_mutation(population);
-    // mutation.be_elitist();
+    do_elitist_replace();
   }
 
   compute_fitness_of_each_gene();  
