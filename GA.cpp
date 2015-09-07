@@ -162,13 +162,12 @@ void GA::create_new_generation() {
   debug_algorithm();
 }
 
-
 void GA::create_initial_population() {
   generation_number = 0;
+  historic_best_fitness = -10000;
   ga_conf.initializator->do_initialize(population);
-  fitness = vector<float>(population.size());
+  fitness = vector<float>(population.size(), 0);
 }
-
 
 bool GA::termination_criteria_satisfied() const {
   string reason;

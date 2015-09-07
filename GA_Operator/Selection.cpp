@@ -46,7 +46,7 @@ Population SUS::do_selection(const Population& population, const vector<float>& 
   for (int i = 0; i < int(population.size()) && picked_index <= int(population.size()); i++) {
     flindex += standard_fitness[i];
     while (picked_index < flindex) {
-      if (picked_index <= population.size())
+      if (picked_index <= int(population.size()))
         new_population.push_back(population[picked_index - 1]);
       picked_index++;
     }
