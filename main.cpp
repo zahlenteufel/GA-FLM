@@ -23,9 +23,10 @@ int main(int argc, char* argv[]) {
     unsigned random_seed = chrono::system_clock::now().time_since_epoch().count();
     GA_Operator::set_random_seed(random_seed);
 
-    // ga_flm.search();
+    ga.search();
   } catch (char const* s) {
-    throw string(s);
+    cerr << "ERROR: " << s << endl;
+    return 1;
   } catch (string s) {
     cerr << "ERROR: " << s << endl;
     return 1;

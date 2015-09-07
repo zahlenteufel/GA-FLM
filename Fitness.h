@@ -12,6 +12,8 @@ public:
 
   virtual float evaluate(float logprob, float perplexity, int complexity) const = 0;
 
+  virtual ~Fitness() {};
+
 };
 
 

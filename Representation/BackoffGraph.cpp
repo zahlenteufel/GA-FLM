@@ -64,75 +64,72 @@ string transform_factor_tag(const string orig) {
 // This is done by recursively calling Node::printFile for each Node in the Backoff graph.
 // The smoothing options are implemented in the end by addOptions().
 string BackoffGraph::factor_file(const string& ga_path, const string& basename) {
-  // If nodes is empty, write no file
-  if (!nodes.empty()) {
-    queue<int> que;
-    string ffile = "1\n";
-    ffile += factor_to_predict + ": ";
-    int count = 0; //counts the number of lines for backoff
+  queue<int> que;
+  string ffile = "1\n";
+  ffile += factor_to_predict + ": ";
+  int count = 0; //counts the number of lines for backoff
 
-    Node* root = nodes[0];
+  Node* root = nodes[0];
 
-    vector<string> startFactors = root->activeFactors();
-    ffile += " " + to_string(startFactors.size()) + " ";
+  vector<string> startFactors = root->activeFactors();
+  ffile += " " + to_string(startFactors.size()) + " ";
 
-    for (string factor : startFactors)
-      ffile += transform_factor_tag(factor) + " ";
+  for (string factor : startFactors)
+    ffile += transform_factor_tag(factor) + " ";
     
-    ffile += ga_path + basename + ".count.gz " + ga_path + basename + ".lm.gz INSERT_NUMBER_HERE\n";
+  ffile += ga_path + basename + ".count.gz " + ga_path + basename + ".lm.gz INSERT_NUMBER_HERE\n";
 
-    ffile += root->printFile();
-    count++; // counts the number of lines
+  ffile += root->printFile();
+  count++; // counts the number of lines
 
-    // Init queue
-    for (int child : root->children())
-      que.push(child);
+  // Init queue
+  for (int child : root->children())
+    que.push(child);
 
-    // Breadth-first printout of nodes by using queue
-    map<string, int> headmap;
-    while (!que.empty()) {
-      int n = que.front(); // note that n is an index to a Node, not the node or node reference.
-      que.pop(); // pop first element off the queue
+  // Breadth-first printout of nodes by using queue
+  map<string, int> headmap;
+  while (!que.empty()) {
+    int n = que.front(); // note that n is an index to a Node, not the node or node reference.
+    que.pop(); // pop first element off the queue
       
-      Node* node = nodes[n];
+    Node* node = nodes[n];
 
-      // get the line to print out for this node
-      string ffile_line = node->printFile();
+    // get the line to print out for this node
+    string ffile_line = node->printFile();
       
-      // Due to the implementation of backoffgraph.grow(), repeated nodes may occur.
-      // Thus, there may be repeated lines. This doesn't change the FLM, but makes the factor-file looks not pretty.
-      // So here we find those duplicates and don't print them out. This is done by finding the "head" of each line
-      // (the active factors and drop list), which uniquely identifies a node and checking a map to see if this head appeared before.
-      string::size_type headend = ffile_line.find_first_of(' ');
-      string head = ffile_line.substr(0, headend);
+    // Due to the implementation of backoffgraph.grow(), repeated nodes may occur.
+    // Thus, there may be repeated lines. This doesn't change the FLM, but makes the factor-file looks not pretty.
+    // So here we find those duplicates and don't print them out. This is done by finding the "head" of each line
+    // (the active factors and drop list), which uniquely identifies a node and checking a map to see if this head appeared before.
+    string::size_type headend = ffile_line.find_first_of(' ');
+    string head = ffile_line.substr(0, headend);
 
-      if (headmap.count(head) == 0) {
-        // this node is new, so we print it
-        count++;
-        ffile += ffile_line;
-        headmap[head] = 1;
-      }
-
-      // Now push the children nodes in the que, to be printed later
-      vector<int> children = node->children();
-      for (int child : children)
-        que.push(child);
+    if (headmap.count(head) == 0) {
+      // this node is new, so we print it
+      count++;
+      ffile += ffile_line;
+      headmap[head] = 1;
     }
 
-    // Factor-file requires us to indicate the number of lines in backoff, so here it is.
-    string::size_type pos = ffile.find(string("INSERT_NUMBER_HERE"));
-    ffile.replace(pos, 18, to_string(count + 1));
-
-    // Add smoothing options by changing the ffile string
-    string newffile = add_options(ffile);
-
-    // final unigram distribution 
-    newffile +=  "0 \t 0 \t ";
-    newffile += default_discount;
-    newffile += " gtmin 1\n";
-
-    return newffile;
+    // Now push the children nodes in the que, to be printed later
+    vector<int> children = node->children();
+    for (int child : children)
+      que.push(child);
   }
+
+  // Factor-file requires us to indicate the number of lines in backoff, so here it is.
+  string::size_type pos = ffile.find(string("INSERT_NUMBER_HERE"));
+  ffile.replace(pos, 18, to_string(count + 1));
+
+  // Add smoothing options by changing the ffile string
+  string newffile = add_options(ffile);
+
+  // final unigram distribution 
+  newffile +=  "0 \t 0 \t ";
+  newffile += default_discount;
+  newffile += " gtmin 1\n";
+
+  return newffile;
 }
 
 // Uses information in smoothing options part of the gene to change the factor-file correspondingly

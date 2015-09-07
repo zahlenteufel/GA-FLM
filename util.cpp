@@ -76,7 +76,7 @@ string trim(const string& s) {
 // Extracts the option from a line of PARAM file
 string _extract_option_string(const string& input_str) {
   // Extracts substring after "=" character
-  int delim_pos = input_str.find_first_of('=');
+  unsigned delim_pos = input_str.find_first_of('=');
 
   if (delim_pos == string::npos)
     throw "Invalid option, '=' expected";

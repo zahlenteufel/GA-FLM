@@ -1,7 +1,7 @@
 CXX=g++
 CXXFLAGS=-std=c++0x -c -g -Wall -pedantic -O2
 LDFLAGS=
-SOURCES=main.cpp BackoffGraph.cpp FLM_Conf.cpp GA_Conf.cpp Gene.cpp Node.cpp ga-flm.cpp ga-operator.cpp util.cpp
+SOURCES=main.cpp GA.cpp FLM_Conf.cpp GA_Conf.cpp util.cpp Fitness.cpp Representation/BackoffGraph.cpp Representation/Gene.cpp Representation/Node.cpp GA_Operator/Crossover.cpp GA_Operator/GA_Operator.cpp GA_Operator/Initializator.cpp GA_Operator/Mutation.cpp GA_Operator/Selection.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=ga-flm
 
@@ -16,4 +16,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
-	rm -v -f *.o $(EXECUTABLE)
+	rm -v -f *.o GA_Operator/*.o Representation/*.o $(EXECUTABLE)

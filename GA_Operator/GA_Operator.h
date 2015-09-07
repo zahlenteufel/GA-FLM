@@ -42,6 +42,8 @@ public:
 
 protected:
 
+  virtual ~GA_Operator() {};
+
   static default_random_engine rng;
 
   float random_number_in_01();

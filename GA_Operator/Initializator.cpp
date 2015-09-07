@@ -37,22 +37,21 @@ Population Initializator::do_initialize() {
   if (!infile)
     throw "Invalid seedfile";
 
-  
-  int seed_count = 0;
-
   vector<string> seeds;
 
-  while (seed_count < population_size) {
+  while (int(seeds.size()) < population_size) {
     string seed;
     infile >> seed;
-    if (seed.size() != flm_conf.chromosome_length)
-      throw "Bad seed";
-    // TODO: check seed format..
-    result.push_back(from_seed(seed));
-    seed_count++;
+
+    if (seed != "") {
+      if (int(seed.size()) != flm_conf.chromosome_length)
+        throw "Bad seed";
+      // TODO: check seed format..
+      seeds.push_back(seed);
+    } else {
+      seeds.push_back(random_seed());
+    }
   }
-  while (seeds.size() < population_size)
-    seeds.push_back(random_seed());
 
   for (string seed : seeds)
     result.push_back(from_seed(seed)); 

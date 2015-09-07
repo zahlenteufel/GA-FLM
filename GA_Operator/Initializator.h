@@ -18,8 +18,8 @@ private:
   Chromosome from_seed(const string& seed);
   string random_seed();
 
-  const string seed_filename;
   int population_size;
+  const string seed_filename;
 
 };
 

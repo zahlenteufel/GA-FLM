@@ -33,7 +33,8 @@
 // #include "../util.h"
 #include "Node.h"
 
-Node::Node(vector<string> factors) : _skip(false), _activeFactors(factors) {
+Node::Node(vector<string> factors) : _activeFactors(factors) {
+  _skip = false;
   _level = factors.size();
 }
 

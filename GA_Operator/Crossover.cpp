@@ -13,7 +13,7 @@ bool Crossover::decide_to_do_crossover() {
 
 void Crossover::do_crossover(Population& population) {
   shuffle(population.begin(), population.end(), rng);
-  for (int index = 0; index + 1 < population.size(); index += 2)
+  for (int index = 0; index + 1 < int(population.size()); index += 2)
     if (decide_to_do_crossover())
       do_crossover(population[index], population[index + 1]);
 }
