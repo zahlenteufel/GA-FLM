@@ -10,9 +10,7 @@ class Fitness {
 
 public:
 
-  virtual float evaluate(float logprob, float perplexity, float complexity) const = 0;
-
-  virtual string name() const = 0;
+  virtual float evaluate(float logprob, float perplexity, int complexity) const = 0;
 
 };
 
@@ -24,9 +22,7 @@ public:
   BIC(float fitness_scaling_constant, int k) :
     fitness_scaling_constant(fitness_scaling_constant), k(k) {};
 
-  float evaluate(float logprob, float perplexity, float complexity) const override;
-
-  string name() const override;
+  float evaluate(float logprob, float perplexity, int complexity) const override;
 
 private:
 
@@ -44,9 +40,7 @@ public:
   InversePPL(float fitness_scaling_constant) :
     fitness_scaling_constant(fitness_scaling_constant) {};
 
-  float evaluate(float logprob, float perplexity, float complexity) const override;
-
-  string name() const override;
+  float evaluate(float logprob, float perplexity, int complexity) const override;
 
 private:
 

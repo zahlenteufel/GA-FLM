@@ -15,9 +15,8 @@ int main(int argc, char* argv[]) {
   try {
     parse_arguments(argc, argv);
     FLM_Conf flm_conf(flmparamfile);
-    GA_Conf ga_conf(flm_conf.chromosome_length, gaparamfile, seedfile);
-
-    // GA_FLM ga_flm(ga_conf, flm_conf);
+    GA_Conf ga_conf(flm_conf, gaparamfile, seedfile);
+    GA ga(ga_conf, flm_conf);
 
     // ga_flm.search();
   } catch (char const* s) {

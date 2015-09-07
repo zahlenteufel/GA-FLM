@@ -8,6 +8,8 @@
 #include "GA_Operator/Crossover.h"
 #include "GA_Operator/Mutation.h"
 #include "GA_Operator/Selection.h"
+#include "GA_Operator/Initializator.h"
+#include "FLM_Conf.h"
 #include "Fitness.h"
 
 using namespace std;
@@ -19,7 +21,7 @@ class GA_Conf {
   
 public:
 
-  GA_Conf(int chromosome_length, const string& gaparamfile, const string& seedfile);
+  GA_Conf(const FLM_Conf& flm_conf, const string& gaparamfile, const string& seedfile);
 
   ~GA_Conf();
 
@@ -27,7 +29,6 @@ public:
 
   void dump() const;
 
-  string seedfile;
   int chromosome_length;
   int population_size;
   int maximum_number_of_generations;
@@ -35,6 +36,7 @@ public:
   Crossover* crossover;
   Selection* selection;
   Mutation* mutation;
+  Initializator* initializator;
 
   Fitness* fitness_function;
 

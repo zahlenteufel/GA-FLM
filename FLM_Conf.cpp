@@ -97,10 +97,15 @@ string FLM_Conf::make_fngram_command(const string& filename, const string& ga_pa
   return fngram_count_call + fngram_call + evaluate_perplexity; // + clean;
 }
 
-void FLM_Conf::create_factor_file(const vector<int>& indv, const string& basename, const string& ga_path) const {
-  BackoffGraph backoff_graph(*this, indv);
-  string flmfile = ga_path + basename + ".flm";
-  ofstream outfile(flmfile.c_str());
-  string factor_file_content = backoff_graph.factor_file(ga_path, basename);
-  outfile << factor_file_content;
+string to_string(const Chromosome& c) {
+  stringstream ss;
+  for (int gene : c)
+    ss << c;
+  return ss.str();
+}
+
+void FLM_Conf::create_factor_file(const Chromosome& chromosome, const string& ga_path) const {
+  BackoffGraph backoff_graph(*this, chromosome);
+  ofstream outfile((ga_path + to_string(chromosome) + ".flm").c_str());
+  outfile << backoff_graph.factor_file(ga_path, to_string(chromosome));
 }

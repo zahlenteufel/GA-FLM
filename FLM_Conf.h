@@ -4,6 +4,8 @@
 #include <iostream>
 #include "util.h"
 
+typedef vector<int> Chromosome;
+
 
 class FLM_Conf {
 
@@ -11,9 +13,9 @@ public:
 
   FLM_Conf(string s);
   
-  string make_fngram_command(const string& filename, const string& GA_PATH) const;
+  string make_fngram_command(const string& filename, const string& ga_path) const;
 
-  void create_factor_file(const vector<int>& indv, const string& basename, const string& GA_PATH) const;
+  void create_factor_file(const Chromosome& chromosome, const string& ga_path) const;
   
   void dump() const;
 
@@ -41,5 +43,7 @@ private:
   void parse_FLM_PARAMS_file(const string& paramfile);
 
 };
+
+string to_string(const Chromosome& chromosome);
 
 #endif

@@ -16,7 +16,7 @@ public:
     GA_Operator(chromosome_length),
     crossover_probability(crossover_probability) {};
 
-  void do_crossover(const Population&, Population&); // TODO: do it inline
+  void do_crossover(Population&);
 
   virtual void do_crossover(Chromosome&, Chromosome&) = 0;
 
@@ -39,7 +39,7 @@ public:
   Uniform(int chromosome_length, float crossover_probability) : 
     Crossover(chromosome_length, crossover_probability) {};
 
-  virtual void do_crossover(Chromosome&, Chromosome&) override;
+  void do_crossover(Chromosome&, Chromosome&) override;
 
 };
 
@@ -50,7 +50,7 @@ public:
   OnePoint(int chromosome_length, float crossover_probability) : 
     Crossover(chromosome_length, crossover_probability) {};
 
-  virtual void do_crossover(Chromosome&, Chromosome&) override;
+  void do_crossover(Chromosome&, Chromosome&) override;
 
 };
 
@@ -61,7 +61,7 @@ public:
   TwoPoint(int chromosome_length, float crossover_probability) : 
     Crossover(chromosome_length, crossover_probability) {};
 
-  virtual void do_crossover(Chromosome&, Chromosome&) override;
+  void do_crossover(Chromosome&, Chromosome&) override;
 
 };
 

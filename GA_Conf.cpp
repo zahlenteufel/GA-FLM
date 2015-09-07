@@ -3,13 +3,21 @@
 #include <algorithm>
 #include <list>
 
-GA_Conf::GA_Conf(int chromosome_length, const string& gaparamfile, const string& seedfile) : 
-  seedfile(seedfile), chromosome_length(chromosome_length) {
+GA_Conf::GA_Conf(const FLM_Conf& flm_conf, const string& gaparamfile, const string& seed_filename) {
   crossover = nullptr;
   selection = nullptr;
   mutation = nullptr;
   fitness_function = nullptr;
+  chromosome_length = flm_conf.chromosome_length;
   parse_GA_PARAMS_file(gaparamfile);
+  initializator = new Initializator(
+    chromosome_length,
+    population_size,
+    seed_filename,
+    flm_conf.smooth_len,
+    flm_conf.discounts.size(),
+    flm_conf.cutoff_max
+  );
 }
 
 GA_Conf::~GA_Conf() {
@@ -17,6 +25,7 @@ GA_Conf::~GA_Conf() {
   delete selection;
   delete mutation;
   delete fitness_function;
+  delete initializator;
 }
 
 void GA_Conf::parse_GA_PARAMS_file(const string& gaparamfile) {

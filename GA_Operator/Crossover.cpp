@@ -9,21 +9,13 @@ bool Crossover::decide_to_do_crossover() {
   return random_number_in_01() < crossover_probability;
 }
 
-// do crossover of pop1 and leave the result in pop2...
-void Crossover::do_crossover(const Population& pop1, Population& pop2) {
-  Population shuffled(pop1);
-  shuffle(shuffled.begin(), shuffled.end(), rng);
-  int population_size = shuffled.size(), chromosome_length = shuffled[0].size();
-  for (int index = 0; index + 1 < population_size; index += 2) {
-    for (int j = 0; j < chromosome_length; j++) {
-      const Chromosome& new1 = shuffled[index], new2 = shuffled[index + 1];
-      Chromosome& old1 = pop2[index], old2 = pop2[index + 1];
-      copy(new1, old1);
-      copy(new2, old2);
-      if (decide_to_do_crossover())
-        do_crossover(old1, old2);
-    }
-  }
+// TODO: create a custom Crossover that uses a mix of these
+
+void Crossover::do_crossover(Population& population) {
+  shuffle(population.begin(), population.end(), rng);
+  for (int index = 0; index + 1 < population.size(); index += 2)
+    if (decide_to_do_crossover())
+      do_crossover(population[index], population[index + 1]);
 }
 
 void Uniform::do_crossover(Chromosome& c1, Chromosome& c2) {
