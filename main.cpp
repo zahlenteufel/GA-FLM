@@ -33,8 +33,8 @@ int main(int argc, char* argv[]) {
 
     float best_fitness, best_perplexity;
     Chromosome best = ga.search(best_fitness, best_perplexity);
-    cerr << "Best fitness: " << best_fitness;
-    cerr << "Best best_perplexity: " << best_perplexity;
+    cerr << "Best fitness: " << best_fitness << endl;
+    cerr << "Best best_perplexity: " << best_perplexity << endl;
     // backup_best(ga_conf.ga_path, to_string(best));
 
   } catch (char const* s) {
