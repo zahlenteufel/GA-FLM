@@ -36,8 +36,6 @@
 
 BackoffGraph::BackoffGraph(const FLM_Conf& flm_conf, const vector<int>& indv) : 
   g(flm_conf, indv), factor_to_predict(flm_conf.factor_to_predict), default_discount(flm_conf.default_discount) {
-  // factor_to_predict = flm_conf.factor_to_predict;
-  // default_discount = flm_conf.default_discount;
   grow();
 }
 
@@ -229,7 +227,11 @@ void BackoffGraph::skip(Node* n, int lev) {
 void BackoffGraph::grow() {
   // Create root node
   vector<string> factors = g.allFactors();
-  if (!factors.empty()) {
+  if (factors.empty()) {
+    cerr << "ERROR: no factors to start with" << endl;
+    exit(1);
+  }
+  else {
     Node* root = new Node(factors);
     nodes.push_back(root); 
     j = 1; // index for all nodes in nodes

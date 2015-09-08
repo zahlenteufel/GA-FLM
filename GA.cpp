@@ -142,7 +142,7 @@ int minimum_index(const vector<float>& v) {
   return min_element(v.begin(), v.end()) - v.begin();
 }
 
-void GA::do_elitist_replace() {
+void GA::do_elitist_replacement() {
   if (!isIn(population, historic_best)) {
     int min_index = minimum_index(fitness);
     population[min_index] = historic_best;
@@ -157,10 +157,10 @@ void GA::create_new_generation() {
     ga_conf.selection->do_selection(population, fitness);
     ga_conf.crossover->do_crossover(population);
     ga_conf.mutation->do_mutation(population);
-    do_elitist_replace();
+    do_elitist_replacement();
   }
 
-  compute_fitness_of_each_gene();  
+  compute_fitness_of_each_gene();
   // linear_scaling();
   generation_number++;
   debug_algorithm();

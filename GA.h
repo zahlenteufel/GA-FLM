@@ -57,7 +57,7 @@ private:
   bool termination_criteria_satisfied() const;
   float average_fitness() const;
   float best_fitness() const;
-  void do_elitist_replace();
+  void do_elitist_replacement();
 
   struct info {
     float fitness, perplexity, logprob;

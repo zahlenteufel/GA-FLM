@@ -17,6 +17,13 @@ int Mutation::perturb_smooth_option(int smooth_option) {
   return smooth_option;
 }
 
+bool all_zeros(vector<int>::iterator start, vector<int>::iterator end) {
+  for (auto it = start; it != end; ++it) 
+    if (*it != 0)
+      return false;
+  return true; 
+}
+
 void Mutation::do_mutation(Chromosome& c) {
   vector<bool> mutated(flm_conf.chromosome_length, false);
   for (int i = 0; i < flm_conf.chromosome_length; i++) {
@@ -32,6 +39,12 @@ void Mutation::do_mutation(Chromosome& c) {
         else // smooth option
           c[i] = perturb_smooth_option(c[i]);
       }
+    }
+    // ensure at least one activated factor in chromosome..
+    if (all_zeros(c.begin(), c.begin() + flm_conf.factors.size())) {
+      int i = random_int(flm_conf.factors.size());
+      mutated[i] = !mutated[i];
+      c[i] = 1 - c[i];
     }
   }
   show_mutation(mutated);
