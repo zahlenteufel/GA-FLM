@@ -81,7 +81,6 @@ void FLM_Conf::dump() const {
 }
 
 string FLM_Conf::make_fngram_command(const string& filename, const string& ga_path) const {
-  // TODO: verify that the path are working.. 
 
   string fngram_count_call = fngramcount_path + " -factor-file " + ga_path + filename + ".flm" +
     " -lm -write-counts -unk -text " + data_path + trainset + " " + fngramcount_options + "; ";

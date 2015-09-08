@@ -36,8 +36,6 @@ public:
 
   GA_Operator(const FLM_Conf& flm_conf) : flm_conf(flm_conf) {};
 
-  // void be_elitist(); // <-- TODO: change this name...
-
   static void set_random_seed(unsigned seed);
 
 protected:
