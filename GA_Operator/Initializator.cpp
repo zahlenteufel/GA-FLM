@@ -1,6 +1,12 @@
 #include "Initializator.h"
 #include <fstream>
 
+bool all_zeros(string::iterator start, string::iterator end) {
+  for (auto it = start; it != end; ++it) 
+    if (*it != '0')
+      return false;
+  return true;
+}
 
 Chromosome Initializator::from_seed(const string& seed) {
   Chromosome result;
@@ -16,10 +22,18 @@ string Initializator::random_seed() {
   //
   #define encode(i) char('0' + i)
   string s(flm_conf.chromosome_length, '0');
+
   // Initialize all bits for Initial Factors and Backoff Graph 
   int len1 = flm_conf.chromosome_length - flm_conf.smooth_len; 
   for (int i = 0; i < len1; i++)
     s[i] = encode(random_bit());
+
+  // Ensure at least one activated factor in chromosome..
+  if (all_zeros(s.begin(), s.begin() + flm_conf.factors.size())) {
+    int i = random_int(flm_conf.factors.size());
+    s[i] = '1';
+  }
+
   // Initialize remaining portion of the gene with integers (for smoothing options) 
   for (int j = len1; j < flm_conf.chromosome_length; j += 2) { 
     // initialize discount method
