@@ -167,7 +167,7 @@ void GA::create_new_generation() {
 }
 
 void GA::create_initial_population() {
-  generation_number = 0;
+  generation_number = 1;
   historic_best_fitness = -10000;
   ga_conf.initializator->do_initialize(population);
   fitness = vector<float>(population.size(), 0);

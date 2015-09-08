@@ -92,9 +92,9 @@ string FLM_Conf::make_fngram_command(const string& filename, const string& ga_pa
   // Command for calculating perplexity. Necessary if fitness function includes a complexity term (e.g. BIC)
   string evaluate_perplexity = "zcat " + ga_path + filename + ".lm.gz | perl getcomplexity.pl > " + ga_path + filename + ".complexity; "; 
 
-  // string clean = "rm " + ga_path + filename + ".lm.gz; rm " + ga_path + filename + ".count.gz ";
+  string clean = "rm " + ga_path + filename + ".lm.gz; rm " + ga_path + filename + ".count.gz ";
   
-  return fngram_count_call + fngram_call + evaluate_perplexity; // + clean;
+  return fngram_count_call + fngram_call + evaluate_perplexity + clean;
 }
 
 string to_string(const Chromosome& chromosome) {
