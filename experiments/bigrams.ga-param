@@ -1,0 +1,23 @@
+Population Size           = 10
+Maximum no of generations = 100
+P(Crossover)              = 0.9
+P(Mutation)               = 0.01
+Crossover type            = hybrid
+Selection type            = roulette
+(tournament_selection) n  = 10
+Fitness scaling constant  = 1000000
+Fitness function          = BIC
+BIC_constant_k	          = 1.0
+PATH_for_GA_FLM_files 	  = experiments/bigrams/
+ID                        = bigrams
+
+===========================================
+NOTES: This file contains settings for the basic genetic algorithm.
+
+- Crossover type may be {2-point,1-point,uniform}
+- Selection type may be {SUS, roulette, tournament}
+- (tournament_selection) n is the number of genes picked in tournament selection
+- Fitness scaling constant is just a linear scaling constant that makes sure fitness values are in reasonable ranges.
+- Fitness function is currently {BIC,inversePPL}
+- BIC_k can be any float for the Bayesian Info Criteria weight of complexity penalty
+- PATH_for_GAFLM_files is where all the EvalLog, ga.pmake, and factor-files are stored. 

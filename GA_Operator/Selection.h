@@ -24,7 +24,7 @@ public:
   Roulette(const FLM_Conf& flm_conf) :
     Selection(flm_conf) {};
 
-  virtual Population do_selection(const Population& population, const vector<float>& fitness) override;
+  virtual Population do_selection(const Population& population, const vector<float>& fitness);
 
 };
 
@@ -35,7 +35,7 @@ public:
   Tournament(const FLM_Conf& flm_conf, int tournament_n) :
     Selection(flm_conf), tournament_n(tournament_n) {};
 
-  virtual Population do_selection(const Population& population, const vector<float>& fitness) override;
+  virtual Population do_selection(const Population& population, const vector<float>& fitness);
 
 private:
 
@@ -50,7 +50,7 @@ public:
   SUS(const FLM_Conf& flm_conf) :
     Selection(flm_conf) {};
 
-  virtual Population do_selection(const Population& population, const vector<float>& fitness) override;
+  virtual Population do_selection(const Population& population, const vector<float>& fitness);
 
 };
 

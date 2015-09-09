@@ -38,7 +38,7 @@ public:
   Hybrid(const FLM_Conf& flm_conf, float crossover_probability) : 
     Crossover(flm_conf, crossover_probability) {};
 
-  vector<bool> do_crossover(Chromosome&, Chromosome&) override;
+  vector<bool> do_crossover(Chromosome&, Chromosome&);
 
 };
 
@@ -49,7 +49,7 @@ public:
   Uniform(const FLM_Conf& flm_conf, float crossover_probability) : 
     Crossover(flm_conf, crossover_probability) {};
 
-  vector<bool> do_crossover(Chromosome&, Chromosome&) override;
+  vector<bool> do_crossover(Chromosome&, Chromosome&);
 
 };
 
@@ -60,7 +60,7 @@ public:
   OnePoint(const FLM_Conf& flm_conf, float crossover_probability) : 
     Crossover(flm_conf, crossover_probability) {};
 
-  vector<bool> do_crossover(Chromosome&, Chromosome&) override;
+  vector<bool> do_crossover(Chromosome&, Chromosome&);
 
 };
 
@@ -71,7 +71,7 @@ public:
   TwoPoint(const FLM_Conf& flm_conf, float crossover_probability) : 
     Crossover(flm_conf, crossover_probability) {};
 
-  vector<bool> do_crossover(Chromosome&, Chromosome&) override;
+  vector<bool> do_crossover(Chromosome&, Chromosome&);
 
 };
 

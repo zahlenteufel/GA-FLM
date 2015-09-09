@@ -24,7 +24,7 @@ public:
   BIC(float fitness_scaling_constant, int k) :
     fitness_scaling_constant(fitness_scaling_constant), k(k) {};
 
-  float evaluate(float logprob, float perplexity, int complexity) const override;
+  float evaluate(float logprob, float perplexity, int complexity) const;
 
 private:
 
@@ -42,7 +42,7 @@ public:
   InversePPL(float fitness_scaling_constant) :
     fitness_scaling_constant(fitness_scaling_constant) {};
 
-  float evaluate(float logprob, float perplexity, int complexity) const override;
+  float evaluate(float logprob, float perplexity, int complexity) const;
 
 private:
 

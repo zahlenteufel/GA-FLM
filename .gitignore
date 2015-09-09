@@ -2,3 +2,4 @@ experiments/serial
 *.o
 example/serial/*
 ga-flm
+experiments/data/*
