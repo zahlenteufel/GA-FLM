@@ -1,9 +1,9 @@
-Population Size           = 10
+Population Size           = 30
 Maximum no of generations = 100
 P(Crossover)              = 0.9
 P(Mutation)               = 0.01
-Crossover type            = hybrid
-Selection type            = roulette
+Crossover type            = 2-point
+Selection type            = tournament
 (tournament_selection) n  = 10
 Fitness scaling constant  = 1000000
 Fitness function          = BIC
